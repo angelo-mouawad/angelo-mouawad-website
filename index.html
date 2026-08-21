@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#07090d" />
 <title>Angelo Mouawad</title>
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%230a0f18"/><text x="32" y="47" font-family="Archivo Black,Archivo,Helvetica,Arial,sans-serif" font-size="46" font-weight="900" text-anchor="middle" fill="%236fe3ff">A</text></svg>'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +18,7 @@
   --line:rgba(120,180,255,.16);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto}
+html{scroll-behavior:auto;overscroll-behavior-y:none}
 body{
   background:var(--bg);
   color:var(--ink);
@@ -55,9 +56,10 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1}
 #sectLabel .rule{width:46px;height:1px;background:var(--line)}
 #scrollCue{position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:6;
   display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:none;
-  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.4em;color:var(--dim)}
-#scrollCue .stem{width:1px;height:44px;background:linear-gradient(var(--cyan),transparent);
-  animation:stem 2.2s ease-in-out infinite}
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.4em;
+  color:var(--cyan);text-shadow:0 0 14px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.9)}
+#scrollCue .stem{width:2px;height:44px;background:linear-gradient(var(--cyan),transparent);
+  box-shadow:0 0 8px rgba(111,227,255,.7);animation:stem 2.2s ease-in-out infinite}
 @keyframes stem{0%,100%{transform:scaleY(.4);opacity:.4}50%{transform:scaleY(1);opacity:1}}
 
 .sect{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;
@@ -151,17 +153,70 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1}
 #loader .lmark{font-size:13px;letter-spacing:.5em;color:var(--cyan)}
 #loader .ltrack{width:180px;height:1px;background:rgba(120,180,255,.15);overflow:hidden}
 #loader .lfill{height:100%;width:40%;background:var(--cyan);animation:load 1.2s ease-in-out infinite}
+#loader.det .lfill{animation:none;width:0%;transition:width .45s ease}
 @keyframes load{0%{transform:translateX(-100%)}100%{transform:translateX(460%)}}
 #loader .lsub{font-size:10px;letter-spacing:.3em;color:var(--dim)}
 
 @media (max-width:760px){
+  #scrollSpace{height:1500vh}
   .hud-name{display:none}
-  .panel{margin:0 5vw;padding:32px 26px 30px}
-  .proj,.proj.right{justify-content:center;align-items:flex-end;padding-bottom:9vh}
-  #sectLabel{left:18px;bottom:18px}
-  .hud-tl{top:18px;left:18px}
-  #audioBtn{top:18px;right:18px}
-  .cards{gap:14px}.card{width:150px;padding:26px 14px 22px}
+  .hud-tl{top:16px;left:16px}
+  .mark{width:30px;height:30px;font-size:11px}
+  #audioBtn{top:16px;right:16px;padding:8px 11px;font-size:9px;letter-spacing:.16em}
+  #sectLabel{left:16px;bottom:16px;font-size:9px;letter-spacing:.22em}
+  #sectLabel .rule{width:26px}
+  #scrollCue{bottom:26px;font-size:9px;letter-spacing:.3em}
+  #scrollCue .stem{height:34px}
+  .eyebrow{font-size:9px;letter-spacing:.3em;margin-bottom:14px}
+
+  .proj,.proj.right{justify-content:center;align-items:center;padding:0}
+  .panel{margin:0;width:92vw;max-width:92vw;padding:24px 20px 22px;
+    backdrop-filter:blur(8px);max-height:80vh;overflow:hidden}
+  .panel .idx{top:20px;right:20px;font-size:9px}
+  .panel h3{font-size:1.35rem;line-height:1.12}
+  .panel p{margin-top:12px;font-size:.83rem;line-height:1.55}
+  .chips{margin-top:14px;gap:6px}
+  .chip{font-size:9px;padding:4px 7px;letter-spacing:.1em}
+  .plinks{margin-top:18px;gap:18px}
+  .plinks a{font-size:10px;letter-spacing:.16em}
+
+  #heroSub{margin-top:18px;font-size:.88rem;line-height:1.6;max-width:88vw}
+  #heroRole{font-size:10px;letter-spacing:.32em}
+  .heroRule{height:42px;margin-top:24px}
+  #diveSec h3{letter-spacing:.34em}
+  #socialSec .sub{font-size:.85rem}
+  .cards{margin-top:30px;gap:10px}
+  .card{width:29vw;max-width:150px;padding:20px 8px 16px;backdrop-filter:blur(8px)}
+  .card svg{width:24px;height:24px}
+  .card .cname{margin-top:12px;font-size:9px;letter-spacing:.16em}
+  .card .chandle{font-size:8px;word-break:break-all;line-height:1.35}
+  #endQuote{margin-top:24px;font-size:1rem}
+  #endMono{font-size:9px;letter-spacing:.2em}
+}
+@media (max-height:560px){
+  .proj,.proj.right{justify-content:center;align-items:center;padding:0}
+  .panel{margin:0;width:min(620px,88vw);max-width:88vw;padding:16px 20px 15px;
+    backdrop-filter:blur(8px);max-height:92vh;overflow:hidden}
+  .panel .idx{top:14px;right:16px;font-size:9px}
+  .panel h3{font-size:1.15rem;line-height:1.12}
+  .panel p{margin-top:9px;font-size:.78rem;line-height:1.45}
+  .eyebrow{margin-bottom:9px;font-size:9px;letter-spacing:.26em}
+  .chips{margin-top:11px;gap:5px}
+  .chip{font-size:9px;padding:3px 6px;letter-spacing:.08em}
+  .plinks{margin-top:13px;gap:16px}
+  .plinks a{font-size:10px;letter-spacing:.14em}
+  #scrollCue{display:none}
+  #heroSub{margin-top:12px;font-size:.85rem;line-height:1.5}
+  .heroRule{height:24px;margin-top:14px}
+  #socialSec .sub{font-size:.8rem}
+  .cards{margin-top:18px;gap:10px}
+  .card{width:130px;padding:14px 10px 12px}
+  .card svg{width:20px;height:20px}
+  .card .cname{margin-top:9px;font-size:9px}
+  .card .chandle{font-size:8px;word-break:break-all}
+  #endQuote{margin-top:16px;font-size:.95rem}
+  .endRule{margin-top:18px}
+  #endMono{margin-top:14px;font-size:9px}
 }
 @media (prefers-reduced-motion:reduce){
   #heroName .ltr{transition:opacity .4s ease}
@@ -248,7 +303,7 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1}
 <section class="sect proj right" id="pFour">
   <div class="panel">
     <span class="idx">PRJ_04</span>
-    <div class="eyebrow">CLIENT WORK · LIVE WEBSITE</div>
+    <div class="eyebrow">CLIENT WORK · LIVE</div>
     <h3>Samar Holidays</h3>
     <p>Marketing site for a travel agency in Kaslik, Lebanon. One self-contained HTML file, with no framework, no build step, no package manager. Package cards flip on hover and on tap so they work on phones, and the hero title measures itself and rescales to stay on one line at any width.</p>
     <div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JAVASCRIPT</span></div>
@@ -259,7 +314,7 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1}
 <section class="sect proj" id="pFive">
   <div class="panel">
     <span class="idx">PRJ_05</span>
-    <div class="eyebrow">CLIENT WORK · LIVE WEBSITE</div>
+    <div class="eyebrow">CLIENT WORK · LIVE</div>
     <h3>Echoes Events</h3>
     <p>Site for a Beirut event planning and production company covering weddings, corporate galas and concerts. Six scrolling sections with dot navigation that highlights wherever you are, a full-bleed video hero and showreel, and PHP handlers behind the enquiry and job application forms.</p>
     <div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JAVASCRIPT</span><span class="chip">PHP</span></div>
@@ -3595,8 +3650,10 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1}
 (() => {
 "use strict";
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 const MOBILE = Math.min(innerWidth, innerHeight) < 760 || (navigator.maxTouchPoints > 1 && innerWidth < 1024);
+const SHADOWS = true;
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const T = {
@@ -3615,13 +3672,13 @@ const T = {
 
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.5 : 1.75));
+renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.25 : 1.75));
 renderer.setSize(innerWidth, innerHeight);
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.12;
-renderer.shadowMap.enabled = !MOBILE;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.enabled = SHADOWS;
+renderer.shadowMap.type = MOBILE ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
 
 const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, .05, 400);
 
@@ -3877,18 +3934,18 @@ const bookPal = [0x4a6f9e, 0x6e4a3a, 0x49684c, 0xa08a5e, 0x3c4654, 0x7a5470];
 
 function box(w, h, d, mat, x, y, z, parent = room, cast = true) {
   const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
-  m.position.set(x, y, z); m.castShadow = cast && !MOBILE; m.receiveShadow = !MOBILE;
+  m.position.set(x, y, z); m.castShadow = cast && SHADOWS; m.receiveShadow = SHADOWS;
   parent.add(m); return m;
 }
 function cyl(rt, rb, h, seg, mat, x, y, z, parent = room) {
   const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), mat);
-  m.position.set(x, y, z); m.castShadow = !MOBILE; m.receiveShadow = !MOBILE;
+  m.position.set(x, y, z); m.castShadow = SHADOWS; m.receiveShadow = SHADOWS;
   parent.add(m); return m;
 }
 function tube(pts, r, mat, parent = room) {
   const c = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)));
   const m = new THREE.Mesh(new THREE.TubeGeometry(c, 24, r, 6, false), mat);
-  m.castShadow = !MOBILE; parent.add(m); return m;
+  m.castShadow = SHADOWS; parent.add(m); return m;
 }
 function glowPlane(w, h, x, y, z, color, op, ry = 0, rx = 0, parent = room) {
   const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h),
@@ -3945,15 +4002,35 @@ const MODEL_FILES = {
 const MODEL_PATH = 'objects/';
 const gltfLoader = new THREE.GLTFLoader();
 const glbCache = {};
+let glbAsked = 0, glbDone = 0, loaderHidden = false;
+const loaderEl = document.getElementById('loader');
+const loaderFill = loaderEl.querySelector('.lfill');
+const loaderSub = loaderEl.querySelector('.lsub');
+function hideLoader() {
+  if (loaderHidden) return;
+  loaderHidden = true;
+  loaderEl.classList.add('done');
+  setTimeout(() => { loaderEl.style.display = 'none'; }, 1000);
+}
+function glbProgress() {
+  glbDone++;
+  const pct = glbAsked ? Math.round(glbDone / glbAsked * 100) : 100;
+  loaderEl.classList.add('det');
+  loaderFill.style.width = pct + '%';
+  loaderSub.textContent = 'BUILDING ENVIRONMENT  ' + pct + '%';
+  if (glbDone >= glbAsked) setTimeout(hideLoader, 260);
+}
 function withGLB(key, cb) {
   if (glbCache[key]) return cb(glbCache[key]);
   (glbCache[key + '_q'] = glbCache[key + '_q'] || []).push(cb);
   if (glbCache[key + '_l']) return;
   glbCache[key + '_l'] = true;
+  glbAsked++;
   gltfLoader.load(MODEL_PATH + MODEL_FILES[key], g => {
     glbCache[key] = g.scene;
     glbCache[key + '_q'].forEach(f => f(g.scene));
-  }, undefined, e => console.error('GLB load failed:', key, e));
+    glbProgress();
+  }, undefined, e => { console.error('GLB load failed:', key, e); glbProgress(); });
 }
 function placeGLB(key, { pos, height, rotY = 0, rotX = 0, parent = room, sway = false, envI = .7, centerPivot = false, topAlign = false, normMax = false }) {
   const holder = new THREE.Group(); holder.position.set(...pos); holder.rotation.y = rotY;
@@ -3971,7 +4048,7 @@ function placeGLB(key, { pos, height, rotY = 0, rotX = 0, parent = room, sway = 
     obj.position.y -= topAlign ? bb.max.y : (centerPivot ? c.y : bb.min.y);
     obj.traverse(o => {
       if (o.isMesh) {
-        o.castShadow = !MOBILE; o.receiveShadow = !MOBILE;
+        o.castShadow = SHADOWS; o.receiveShadow = SHADOWS;
         if (o.material) o.material.envMapIntensity = envI;
       }
     });
@@ -3984,7 +4061,7 @@ function placeGLB(key, { pos, height, rotY = 0, rotX = 0, parent = room, sway = 
 const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14),
   new THREE.MeshStandardMaterial({ map: floorTex, roughness: .62, metalness: .12,
     roughnessMap: roughTex, bumpMap: roughTex, bumpScale: .015 }));
-floor.rotation.x = -Math.PI / 2; floor.receiveShadow = !MOBILE; room.add(floor);
+floor.rotation.x = -Math.PI / 2; floor.receiveShadow = SHADOWS; room.add(floor);
 
 box(4.38, 6.4, .2, M.wall, -4.81, 3.2, -3.05, room, false);
 box(7.78, 6.4, .2, M.wall, 3.11, 3.2, -3.05, room, false);
@@ -3998,7 +4075,7 @@ box(.04, .09, 16, M.wallD, -2.945, .045, 3, room, false);
 const rug = new THREE.Mesh(new THREE.CircleGeometry(2.2, 48),
   new THREE.MeshStandardMaterial({ map: rugTex, roughness: 1 }));
 rug.rotation.x = -Math.PI / 2; rug.position.set(0, .006, -1.2);
-rug.receiveShadow = !MOBILE; room.add(rug);
+rug.receiveShadow = SHADOWS; room.add(rug);
 
 room.add(new THREE.AmbientLight(0x171c24, .5));
 room.add(new THREE.HemisphereLight(0x222e44, 0x16100a, .32));
@@ -4032,8 +4109,9 @@ for (let i = 0; i < 9; i++) {
 const sun = new THREE.SpotLight(0x8fa7d8, 1.2, 16, .85, .55, 1);
 sun.position.set(-1.7, 2.5, -4.2); sun.target.position.set(.4, 0, 1.0);
 room.add(sun.target); room.add(sun);
-if (!MOBILE) {
-  sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024);
+if (SHADOWS) {
+  sun.castShadow = true;
+  const SM = MOBILE ? 512 : 1024; sun.shadow.mapSize.set(SM, SM);
   sun.shadow.bias = -.0005; sun.shadow.camera.near = .5; sun.shadow.camera.far = 16;
 }
 const moonFill = new THREE.PointLight(0x6e87b8, .35, 5, 2);
@@ -4153,7 +4231,7 @@ for (let i = 0; i < 4; i++)
 const trophy = new THREE.Mesh(new THREE.LatheGeometry(
   [[0,0],[.055,0],[.055,.014],[.018,.02],[.018,.075],[.05,.13],[.046,.155],[0,.165]]
     .map(p => new THREE.Vector2(p[0], p[1])), 18), M.gold);
-trophy.position.set(.32, 1.44, .02); trophy.castShadow = !MOBILE; shelfG.add(trophy);
+trophy.position.set(.32, 1.44, .02); trophy.castShadow = SHADOWS; shelfG.add(trophy);
 const camBody = box(.1, .065, .05, M.black, -.28, .905, .06, shelfG);
 cyl(.024, .024, .035, 14, M.dark, -.28, .905, .1, shelfG).rotation.x = Math.PI / 2;
 const globe = new THREE.Mesh(new THREE.SphereGeometry(.05, 18, 14),
@@ -4226,7 +4304,7 @@ for (let r = 0; r < 4; r++) for (let c = 0; c < 14; c++) {
   dum.position.set(-.195 + c * .03, .014, -.057 + r * .029);
   dum.updateMatrix(); keys.setMatrixAt(ki++, dum.matrix);
 }
-keys.castShadow = !MOBILE; kbG.add(keys);
+keys.castShadow = SHADOWS; kbG.add(keys);
 box(.14, .012, .024, keyMat, .0, .014, .059, kbG);
 box(.024, .012, .024, keyMat, -.18, .014, .059, kbG);
 box(.024, .012, .024, keyMat, .15, .014, .059, kbG);
@@ -4238,7 +4316,7 @@ const mugPts = [[0,0],[.038,0],[.042,.004],[.042,.1],[.046,.105],[.038,.105],[.0
   .map(p => new THREE.Vector2(p[0], p[1]));
 const mug = new THREE.Mesh(new THREE.LatheGeometry(mugPts, 22),
   new THREE.MeshStandardMaterial({ color: 0xd8d2c6, roughness: .35 }));
-mug.position.set(.88, .941, -2.12); mug.castShadow = !MOBILE; room.add(mug);
+mug.position.set(.88, .941, -2.12); mug.castShadow = SHADOWS; room.add(mug);
 const coffee = new THREE.Mesh(new THREE.CircleGeometry(.034, 18),
   new THREE.MeshStandardMaterial({ color: 0x2a1708, roughness: .25 }));
 coffee.rotation.x = -Math.PI / 2; coffee.position.set(.88, 1.033, -2.12); room.add(coffee);
@@ -4528,11 +4606,25 @@ addEventListener('pointermove', e => {
   my = (e.clientY / innerHeight - .5) * 2;
 }, { passive: true });
 
-addEventListener('resize', () => {
+let resizeT = 0;
+function applySize() {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
+}
+addEventListener('resize', () => {
+  clearTimeout(resizeT);
+  resizeT = setTimeout(applySize, MOBILE ? 180 : 0);
 });
+addEventListener('orientationchange', () => setTimeout(applySize, 260));
+canvas.addEventListener('webglcontextlost', e => {
+  e.preventDefault();
+  if (!sessionStorage.getItem('amGlReload')) {
+    sessionStorage.setItem('amGlReload', '1');
+    location.reload();
+  }
+});
+canvas.addEventListener('webglcontextrestored', () => sessionStorage.removeItem('amGlReload'));
 
 const V1 = new THREE.Vector3(), V2 = new THREE.Vector3();
 let lastT = performance.now(), heroOnState = false;
@@ -4580,8 +4672,10 @@ function frame(now) {
     rgbLight.color.setHSL(.55 + Math.sin(t * .4) * .04, .9, .6);
     leaves.forEach((l, i) => { l.rotation.y = Math.sin(t * .7 + i * 1.7) * .035; l.rotation.z = Math.sin(t * .55 + i) * .012; });
     const bk = REDUCED ? 1 : 1 - Math.exp(-dt * 4);
-    ball.rotation.y += (mx * 2.6 - ball.rotation.y) * bk;
-    ball.rotation.x += (my * 1.4 - ball.rotation.x) * bk;
+    const bTx = MOBILE ? Math.sin(t * .26) * 1.5 : mx * 2.6;
+    const bTy = MOBILE ? Math.sin(t * .19) * .45 : my * 1.4;
+    ball.rotation.y += (bTx - ball.rotation.y) * bk;
+    ball.rotation.x += (bTy - ball.rotation.x) * bk;
     const cu = THREE.MathUtils.smoothstep(u, .12, .78);
     chairG.rotation.y = .35 + cu * (Math.PI - .35);
     chairG.position.set(-.46 + cu * .3, 0, -.98 - cu * .44);
@@ -4634,7 +4728,8 @@ camRail.getPoint(0, V1); camera.position.copy(V1);
 tgtRail.getPoint(0, V2); camera.lookAt(V2);
 renderer.render(room, camera);
 requestAnimationFrame(frame);
-setTimeout(() => document.getElementById('loader').classList.add('done'), 900);
+setTimeout(hideLoader, 25000);
+if (glbAsked === 0) setTimeout(hideLoader, 900);
 
 })();
 </script>
