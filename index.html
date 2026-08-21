@@ -25,7 +25,7 @@ body{
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
 }
-#scrollSpace{height:1500vh;position:relative;z-index:0}
+#scrollSpace{height:2100vh;position:relative;z-index:0}
 canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1}
 
 #vignette{position:fixed;inset:0;z-index:3;pointer-events:none;
@@ -212,36 +212,58 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1}
   </div>
 </section>
 
-<section class="sect proj" id="pAlpha">
+<section class="sect proj" id="pOne">
   <div class="panel">
     <span class="idx">PRJ_01</span>
-    <div class="eyebrow">FEATURED BUILD</div>
-    <h3>Project Alpha</h3>
-    <p>A modern web application built with React and Node.js — full-stack architecture with a focus on performance, clean APIs and a refined user experience.</p>
-    <div class="chips"><span class="chip">REACT</span><span class="chip">NODE.JS</span><span class="chip">POSTGRESQL</span><span class="chip">REST API</span></div>
-    <div class="plinks"><a href="#" onclick="return false">GITHUB</a><a href="#" onclick="return false">LIVE DEMO</a></div>
+    <div class="eyebrow">FULL STACK · TEAM PROJECT</div>
+    <h3>Restaurant Management System</h3>
+    <p>A full-stack app for running the day-to-day side of a restaurant: stock tracking, shift scheduling, and notifications pushed to the people affected. Built with a Scrum team at UCLL: a Spring Boot REST API on one side, Next.js on the other, and JWT auth in an httpOnly cookie between them.</p>
+    <div class="chips"><span class="chip">JAVA 21</span><span class="chip">SPRING BOOT</span><span class="chip">NEXT.JS 15</span><span class="chip">REACT 19</span><span class="chip">POSTGRESQL</span><span class="chip">TYPESCRIPT</span></div>
+    <div class="plinks"><a href="https://github.com/angelo-mouawad/restaurant-management-system-project" target="_blank" rel="noopener">GITHUB</a></div>
   </div>
 </section>
 
-<section class="sect proj right" id="pBeta">
+<section class="sect proj right" id="pTwo">
   <div class="panel">
     <span class="idx">PRJ_02</span>
-    <div class="eyebrow">SYSTEMS & NETWORKS</div>
-    <h3>Project Beta</h3>
-    <p>A networking visualization platform that renders live topology, packet flow and latency data as an explorable interactive graph.</p>
-    <div class="chips"><span class="chip">TYPESCRIPT</span><span class="chip">D3.JS</span><span class="chip">WEBSOCKETS</span><span class="chip">DOCKER</span></div>
-    <div class="plinks"><a href="#" onclick="return false">GITHUB</a><a href="#" onclick="return false">LIVE DEMO</a></div>
+    <div class="eyebrow">BACKEND ARCHITECTURE</div>
+    <h3>Flow Engine</h3>
+    <p>A configurable workflow engine. You define a flow once, trigger it over HTTP, and it walks its own steps, validating requests, pausing while people approve them, and pushing notifications over WebSocket in real time. The runner stores its position when it stalls, so resuming is restart-safe without a scheduler.</p>
+    <div class="chips"><span class="chip">JAVA 21</span><span class="chip">SPRING BOOT</span><span class="chip">VUE 3</span><span class="chip">MONGODB</span><span class="chip">WEBSOCKET</span><span class="chip">DOCKER</span></div>
+    <div class="plinks"><a href="https://github.com/angelo-mouawad/flow-engine-project" target="_blank" rel="noopener">GITHUB</a></div>
   </div>
 </section>
 
-<section class="sect proj" id="pGamma">
+<section class="sect proj" id="pThree">
   <div class="panel">
     <span class="idx">PRJ_03</span>
-    <div class="eyebrow">EDUCATION</div>
-    <h3>Project Gamma</h3>
-    <p>A computer science educational tool — interactive visualizations of algorithms and data structures designed to make hard concepts intuitive.</p>
-    <div class="chips"><span class="chip">REACT</span><span class="chip">THREE.JS</span><span class="chip">PYTHON</span><span class="chip">FASTAPI</span></div>
-    <div class="plinks"><a href="#" onclick="return false">GITHUB</a><a href="#" onclick="return false">LIVE DEMO</a></div>
+    <div class="eyebrow">COMPUTER VISION · GAMES</div>
+    <h3>Finger Dragon</h3>
+    <p>A webcam-controlled arcade game. Your index finger flies the dragon and pinching it to your thumb breathes fire, while enemy dragons chase you and shoot back. Hand tracking runs on its own thread so the game never stalls waiting on a camera frame, and it degrades gracefully when there's no webcam at all.</p>
+    <div class="chips"><span class="chip">PYTHON</span><span class="chip">PYGAME</span><span class="chip">MEDIAPIPE</span><span class="chip">OPENCV</span></div>
+    <div class="plinks"><a href="https://github.com/angelo-mouawad/finger-dragon-game" target="_blank" rel="noopener">GITHUB</a></div>
+  </div>
+</section>
+
+<section class="sect proj right" id="pFour">
+  <div class="panel">
+    <span class="idx">PRJ_04</span>
+    <div class="eyebrow">CLIENT WORK · LIVE WEBSITE</div>
+    <h3>Samar Holidays</h3>
+    <p>Marketing site for a travel agency in Kaslik, Lebanon. One self-contained HTML file, with no framework, no build step, no package manager. Package cards flip on hover and on tap so they work on phones, and the hero title measures itself and rescales to stay on one line at any width.</p>
+    <div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JAVASCRIPT</span></div>
+    <div class="plinks"><a href="https://github.com/angelo-mouawad/samar-holidays-website" target="_blank" rel="noopener">GITHUB</a><a href="https://samarholidays.com/" target="_blank" rel="noopener">LIVE SITE</a></div>
+  </div>
+</section>
+
+<section class="sect proj" id="pFive">
+  <div class="panel">
+    <span class="idx">PRJ_05</span>
+    <div class="eyebrow">CLIENT WORK · LIVE WEBSITE</div>
+    <h3>Echoes Events</h3>
+    <p>Site for a Beirut event planning and production company covering weddings, corporate galas and concerts. Six scrolling sections with dot navigation that highlights wherever you are, a full-bleed video hero and showreel, and PHP handlers behind the enquiry and job application forms.</p>
+    <div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JAVASCRIPT</span><span class="chip">PHP</span></div>
+    <div class="plinks"><a href="https://github.com/angelo-mouawad/echoes-events-website" target="_blank" rel="noopener">GITHUB</a><a href="https://eventswithechoes.com/" target="_blank" rel="noopener">LIVE SITE</a></div>
   </div>
 </section>
 
@@ -251,15 +273,15 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1}
     <h2>Let's Connect</h2>
     <p class="sub">Always open to collaboration, internships and interesting problems.</p>
     <div class="cards">
-      <a class="card" href="#" onclick="return false">
+      <a class="card" href="https://www.instagram.com/angelomouawad" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="17.6" cy="6.4" r="1" fill="currentColor" stroke="none"/></svg>
-        <div class="cname">Instagram</div><div class="chandle">@angelo.mouawad</div>
+        <div class="cname">Instagram</div><div class="chandle">@angelomouawad</div>
       </a>
-      <a class="card" href="#" onclick="return false">
+      <a class="card" href="https://github.com/angelo-mouawad" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
-        <div class="cname">GitHub</div><div class="chandle">github.com/angelomouawad</div>
+        <div class="cname">GitHub</div><div class="chandle">github.com/angelo-mouawad</div>
       </a>
-      <a class="card" href="#" onclick="return false">
+      <a class="card" href="https://www.linkedin.com/in/angelo-mouawad-02089329a/" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><rect x="2.5" y="2.5" width="19" height="19" rx="2.5"/><path d="M7 10v7M7 7v.1M11 17v-4a2.6 2.6 0 0 1 5.2 0v4" /><path d="M11 10v1.5"/></svg>
         <div class="cname">LinkedIn</div><div class="chandle">/in/angelo-mouawad</div>
       </a>
@@ -3580,13 +3602,15 @@ const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const T = {
   roomEnd: .295,
   flashMid: .302, flashW: .02,
-  hero:   [.325, .455],
-  dive:   [.45,  .53 ],
-  alpha:  [.525, .615],
-  beta:   [.615, .705],
-  gamma:  [.705, .79 ],
-  social: [.845, .925],
-  end:    [.925, 1.01],
+  hero:   [.325, .432],
+  dive:   [.428, .492],
+  p1:     [.490, .563],
+  p2:     [.563, .636],
+  p3:     [.636, .709],
+  p4:     [.709, .782],
+  p5:     [.782, .855],
+  social: [.885, .945],
+  end:    [.945, 1.01],
 };
 
 const canvas = document.getElementById('c');
@@ -4040,7 +4064,7 @@ function drawTV(g, w, h) {
   g.fillText('21:47', w - 60, 62);
   g.strokeStyle = 'rgba(111,227,255,.22)'; g.lineWidth = 1;
   g.beginPath(); g.moveTo(60, 84); g.lineTo(w - 60, 84); g.stroke();
-  const names = ['ALPHA', 'BETA', 'GAMMA', 'DELTA', 'VOID'];
+  const names = ['RESTAURANT', 'FLOWENGINE', 'DRAGON', 'SAMAR', 'ECHOES'];
   for (let i = 0; i < 5; i++) {
     const big = i === 0, tw = big ? 210 : 128, th = big ? 210 : 128;
     const x = 60 + (big ? 0 : 300 + (i - 1) * 152), y = big ? 150 : 192;
@@ -4066,7 +4090,7 @@ function drawTV(g, w, h) {
   g.font = '800 34px "Archivo", sans-serif';
   g.fillText('CONTINUE PLAYING', 60, 432);
   g.fillStyle = '#4da3ff'; g.font = '500 19px "JetBrains Mono", monospace';
-  g.fillText('> project_alpha.exe \u2014 12.4 HRS', 60, 468);
+  g.fillText('> finger_dragon.exe  ·  12.4 HRS', 60, 468);
   g.fillStyle = 'rgba(233,238,244,.4)'; g.font = '400 17px "JetBrains Mono", monospace';
   g.fillText('\u2715 START      \u25a2 OPTIONS      \u25cb BACK', 60, 522);
 }
@@ -4399,16 +4423,20 @@ function pod(x, z, accent) {
     transparent: true, opacity: .7, depthWrite: false, blending: THREE.AdditiveBlending })));
   return g;
 }
-const podA = pod(-1.9, -52, 0x6fe3ff);
-const podB = pod(1.9, -71, 0x4da3ff);
-const podC = pod(-1.9, -90, 0x8fb8ff);
+const pods = [
+  pod(-1.9, -43, 0x6fe3ff),
+  pod(1.9, -58, 0x4da3ff),
+  pod(-1.9, -74, 0x8fb8ff),
+  pod(1.9, -90, 0x6fe3ff),
+  pod(-1.9, -105.5, 0x4da3ff),
+];
 
 const net = new THREE.Group(); digital.add(net);
 const NODES = MOBILE ? 36 : 64, nodePts = [];
 const nodeGeoBall = new THREE.SphereGeometry(.07, 8, 8);
 const nodeMat = new THREE.MeshBasicMaterial({ color: 0x6fe3ff });
 for (let i = 0; i < NODES; i++) {
-  const v = new THREE.Vector3((Math.random()-.5)*22, (Math.random()-.5)*13, -96 - Math.random()*26);
+  const v = new THREE.Vector3((Math.random()-.5)*22, (Math.random()-.5)*13, -108 - Math.random()*26);
   nodePts.push(v);
   const s = new THREE.Mesh(nodeGeoBall, nodeMat); s.position.copy(v); net.add(s);
 }
@@ -4423,7 +4451,7 @@ const linkMat = new THREE.LineBasicMaterial({ color: 0x4da3ff, transparent: true
   opacity: .22, blending: THREE.AdditiveBlending });
 net.add(new THREE.LineSegments(linkGeo, linkMat));
 
-const finale = new THREE.Group(); finale.position.set(0, 0, -155); digital.add(finale);
+const finale = new THREE.Group(); finale.position.set(0, 0, -168); digital.add(finale);
 finale.add(new THREE.Mesh(new THREE.IcosahedronGeometry(7, 2),
   new THREE.MeshBasicMaterial({ color: 0x3a6db0, wireframe: true, transparent: true, opacity: .5 })));
 const finGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: 0x5fa8ff,
@@ -4433,9 +4461,9 @@ finGlow.scale.set(30, 30, 1); finale.add(finGlow);
 function digiZ(p) {
   const pd = THREE.MathUtils.clamp((p - T.flashMid) / (1 - T.flashMid), 0, 1);
   let z = 8 - pd * 150;
-  if (p > .935) {
-    const e = THREE.MathUtils.clamp((p - .935) / .065, 0, 1);
-    z = (8 - ((.935 - T.flashMid)/(1 - T.flashMid)) * 150) + e * 9 - (1 - e) * 0;
+  if (p > .945) {
+    const e = THREE.MathUtils.clamp((p - .945) / .055, 0, 1);
+    z = (8 - ((.945 - T.flashMid)/(1 - T.flashMid)) * 150) + e * 9;
   }
   return z;
 }
@@ -4450,15 +4478,16 @@ document.querySelectorAll('#heroName .word').forEach(w => {
 
 const $ = id => document.getElementById(id);
 const els = {
-  hero: $('heroSec'), dive: $('diveSec'), alpha: $('pAlpha'), beta: $('pBeta'),
-  gamma: $('pGamma'), social: $('socialSec'), end: $('endSec'),
+  hero: $('heroSec'), dive: $('diveSec'),
+  p1: $('pOne'), p2: $('pTwo'), p3: $('pThree'), p4: $('pFour'), p5: $('pFive'),
+  social: $('socialSec'), end: $('endSec'),
   flash: $('flash'), bar: $('bar'), cue: $('scrollCue'),
   sIdx: $('sectIdx'), sName: $('sectName'),
 };
 const SECTS = [
-  [0, .30, '01', 'THE ROOM'], [.30, .45, '02', 'HELLO'],
-  [.45, .525, '··', 'DIVE'], [.525, .79, '03', 'PROJECTS'],
-  [.79, .845, '··', 'NETWORK'], [.845, .925, '04', 'CONNECT'], [.925, 1.01, '05', 'END'],
+  [0, .30, '01', 'THE ROOM'], [.30, .428, '02', 'HELLO'],
+  [.428, .49, '··', 'DIVE'], [.49, .855, '03', 'PROJECTS'],
+  [.855, .885, '··', 'NETWORK'], [.885, .945, '04', 'CONNECT'], [.945, 1.01, '05', 'END'],
 ];
 function winOp(p, a, b, f = .03) {
   return THREE.MathUtils.clamp((p - a) / f, 0, 1) * THREE.MathUtils.clamp((b - p) / f, 0, 1);
@@ -4529,9 +4558,11 @@ function frame(now) {
   const heroOn = heroO > .25;
   if (heroOn !== heroOnState) { heroOnState = heroOn; els.hero.classList.toggle('on', heroOn); }
   applySect(els.dive, winOp(p, T.dive[0], T.dive[1], .02), 20);
-  applySect(els.alpha, winOp(p, T.alpha[0], T.alpha[1]));
-  applySect(els.beta, winOp(p, T.beta[0], T.beta[1]));
-  applySect(els.gamma, winOp(p, T.gamma[0], T.gamma[1]));
+  applySect(els.p1, winOp(p, T.p1[0], T.p1[1], .026));
+  applySect(els.p2, winOp(p, T.p2[0], T.p2[1], .026));
+  applySect(els.p3, winOp(p, T.p3[0], T.p3[1], .026));
+  applySect(els.p4, winOp(p, T.p4[0], T.p4[1], .026));
+  applySect(els.p5, winOp(p, T.p5[0], T.p5[1], .026));
   applySect(els.social, winOp(p, T.social[0], T.social[1]));
   applySect(els.end, winOp(p, T.end[0], 1.05, .04), 26);
 
@@ -4583,7 +4614,7 @@ function frame(now) {
     heroIco.rotation.y = t * .12; heroIco.rotation.x = t * .07;
     rings.forEach((r, i) => { r.rotation.z += dt * (.08 + (i % 3) * .05) * (i % 2 ? 1 : -1); });
 
-    [podA, podB, podC].forEach((g, i) => {
+    pods.forEach((g, i) => {
       g.userData.core.rotation.y = t * (.5 + i * .12);
       g.userData.core.rotation.x = t * .3;
       g.position.y = Math.sin(t * .9 + i * 2.1) * .14;
