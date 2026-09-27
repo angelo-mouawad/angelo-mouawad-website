@@ -1,0 +1,37 @@
+:root{
+  --bg:#07090d;
+  --ink:#e9eef4;
+  --dim:#8b95a5;
+  --blue:#4da3ff;
+  --cyan:#6fe3ff;
+  --line:rgba(120,180,255,.16);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto;overscroll-behavior-y:none}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Archivo',system-ui,sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+#scrollSpace{height:2253vh;position:relative;z-index:0}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1}
+
+#vignette{position:fixed;inset:0;z-index:3;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 48%, transparent 52%, rgba(0,0,0,.55) 100%);}
+#grain{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");}
+#flash{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;
+  background:radial-gradient(circle at 50% 50%, #16293d 0%, #0a1320 55%, #05080d 100%);}
+
+#loader{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:22px;
+  transition:opacity .8s ease;font-family:'JetBrains Mono',monospace}
+#loader.done{opacity:0;pointer-events:none}
+#loader .lmark{font-size:13px;letter-spacing:.5em;color:var(--cyan)}
+#loader .ltrack{width:180px;height:1px;background:rgba(120,180,255,.15);overflow:hidden}
+#loader .lfill{height:100%;width:40%;background:var(--cyan);animation:load 1.2s ease-in-out infinite}
+#loader.det .lfill{animation:none;width:0%;transition:width .45s ease}
+@keyframes load{0%{transform:translateX(-100%)}100%{transform:translateX(460%)}}
+#loader .lsub{font-size:10px;letter-spacing:.3em;color:var(--dim)}
