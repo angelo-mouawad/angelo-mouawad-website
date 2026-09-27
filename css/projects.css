@@ -16,7 +16,7 @@
   color:var(--cyan);border:1px solid rgba(111,227,255,.25);padding:6px 10px;
   background:rgba(111,227,255,.05)}
 .plinks{margin-top:28px;display:flex;gap:26px}
-.plinks a{pointer-events:auto;color:var(--ink);text-decoration:none;
+.plinks a{color:var(--ink);text-decoration:none;
   font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;
   padding-bottom:5px;border-bottom:1px solid var(--line);transition:color .3s,border-color .3s}
 .plinks a:hover{color:var(--cyan);border-color:var(--cyan)}

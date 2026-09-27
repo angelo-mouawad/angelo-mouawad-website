@@ -6,8 +6,9 @@ ScrollTrigger.create({
   trigger: '#scrollSpace', start: 'top top', end: 'bottom bottom',
   onUpdate: self => { targetP = self.progress; },
 });
-let mx = 0, my = 0;
+let mx = 0, my = 0, mouseSeen = false;
 addEventListener('pointermove', e => {
+  if (e.pointerType === 'mouse') mouseSeen = true;
   mx = (e.clientX / innerWidth - .5) * 2;
   my = (e.clientY / innerHeight - .5) * 2;
 }, { passive: true });
@@ -74,8 +75,8 @@ function frame(now) {
     rgbLight.color.setHSL(.55 + Math.sin(t * .4) * .04, .9, .6);
     leaves.forEach((l, i) => { l.rotation.y = Math.sin(t * .7 + i * 1.7) * .035; l.rotation.z = Math.sin(t * .55 + i) * .012; });
     const bk = REDUCED ? 1 : 1 - Math.exp(-dt * 4);
-    const bTx = MOBILE ? Math.sin(t * .26) * 1.5 : mx * 2.6;
-    const bTy = MOBILE ? Math.sin(t * .19) * .45 : my * 1.4;
+    const bTx = mouseSeen ? mx * 2.6 : Math.sin(t * .26) * 1.5;
+    const bTy = mouseSeen ? my * 1.4 : Math.sin(t * .19) * .45;
     ball.rotation.y += (bTx - ball.rotation.y) * bk;
     ball.rotation.x += (bTy - ball.rotation.x) * bk;
     const cu = THREE.MathUtils.smoothstep(u, .12, .78);

@@ -243,8 +243,6 @@ bookRow(room, .08, 2.46, -2.92, 5);
 box(.18, .03, .13, new THREE.MeshStandardMaterial({ color: bookPal[5], roughness: .85 }),
   -.26, 2.095, -2.92);
 placeGLB('plant', { pos: [-.12, 2.475, -2.9], height: .25, rotY: 3.3, sway: true });
-glowPlane(1.5, .3, -.1, 1.94, -2.95, WARM, .38);
-glowPlane(1.15, .28, .3, 2.32, -2.95, WARM, .38);
 
 box(.56, .74, .035, M.black, 2.62, 2.05, -3.0);
 const poster = new THREE.Mesh(new THREE.PlaneGeometry(.5, .66),
