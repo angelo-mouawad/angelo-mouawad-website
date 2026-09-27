@@ -8,16 +8,20 @@ ScrollTrigger.create({
 });
 let mx = 0, my = 0, mouseSeen = false;
 addEventListener('pointermove', e => {
-  if (e.pointerType === 'mouse') mouseSeen = true;
+  if (e.pointerType !== 'mouse') return;
+  mouseSeen = true;
   mx = (e.clientX / innerWidth - .5) * 2;
   my = (e.clientY / innerHeight - .5) * 2;
 }, { passive: true });
 
-let resizeT = 0;
+let resizeT = 0, lastW = canvas.clientWidth, lastH = canvas.clientHeight;
 function applySize() {
-  camera.aspect = innerWidth / innerHeight;
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (w === lastW && h === lastH) return;
+  lastW = w; lastH = h;
+  camera.aspect = w / h;
   camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
+  renderer.setSize(w, h, false);
 }
 addEventListener('resize', () => {
   clearTimeout(resizeT);
@@ -34,7 +38,7 @@ canvas.addEventListener('webglcontextlost', e => {
 canvas.addEventListener('webglcontextrestored', () => sessionStorage.removeItem('amGlReload'));
 
 const V1 = new THREE.Vector3(), V2 = new THREE.Vector3();
-let lastT = performance.now(), heroOnState = false;
+let lastT = performance.now(), heroOnState = false, lastCu = -1;
 
 function frame(now) {
   requestAnimationFrame(frame);
@@ -82,6 +86,7 @@ function frame(now) {
     const cu = THREE.MathUtils.smoothstep(u, .12, .78);
     chairG.rotation.y = .35 + cu * (Math.PI - .35);
     chairG.position.set(-.46 + cu * .3, 0, -.98 - cu * .44);
+    if (Math.abs(cu - lastCu) > .001) { renderer.shadowMap.needsUpdate = true; lastCu = cu; }
     screenLight.intensity = .5 + Math.sin(t * 7.3) * .03 + Math.sin(t * 1.1) * .05;
     sun.intensity = 1.25 - u * .45;
     led.material.opacity = .55 + Math.sin(t * .9) * .05;

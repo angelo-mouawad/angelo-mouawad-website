@@ -16,7 +16,7 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 #scrollSpace{height:2253vh;position:relative;z-index:0}
-canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1}
+canvas#c{position:fixed;top:0;left:0;width:100%;height:100vh;height:100lvh;display:block;z-index:1}
 
 #vignette{position:fixed;inset:0;z-index:3;pointer-events:none;
   background:radial-gradient(ellipse at 50% 48%, transparent 52%, rgba(0,0,0,.55) 100%);}

@@ -67,6 +67,7 @@ function placeGLB(key, { pos, height, rotY = 0, rotX = 0, parent = room, sway = 
       }
     });
     swayG.add(obj);
+    renderer.shadowMap.needsUpdate = true;
     if (sway) leaves.push(swayG);
   });
   return holder;

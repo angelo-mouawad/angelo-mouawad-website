@@ -1,4 +1,5 @@
 const MOBILE = Math.min(innerWidth, innerHeight) < 760 || (navigator.maxTouchPoints > 1 && innerWidth < 1024);
+const TOUCH = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
 const SHADOWS = true;
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -20,12 +21,14 @@ const DIGI_DEPTH = 165.7;
 
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.25 : 1.75));
-renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.25 : TOUCH ? 1.5 : 1.75));
+renderer.setSize(canvas.clientWidth || innerWidth, canvas.clientHeight || innerHeight, false);
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.12;
 renderer.shadowMap.enabled = SHADOWS;
-renderer.shadowMap.type = MOBILE ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
+renderer.shadowMap.type = MOBILE || TOUCH ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
+renderer.shadowMap.autoUpdate = !TOUCH;
+renderer.shadowMap.needsUpdate = true;
 
-const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, .05, 400);
+const camera = new THREE.PerspectiveCamera(50, (canvas.clientWidth || innerWidth) / (canvas.clientHeight || innerHeight), .05, 400);
