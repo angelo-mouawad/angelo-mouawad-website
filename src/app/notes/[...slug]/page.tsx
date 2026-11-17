@@ -33,36 +33,39 @@ export default async function NotePage({ params }: Props) {
 
   return (
     <div className="grid gap-12 pt-8 pb-(--section) 2xl:grid-cols-[minmax(0,1fr)_14rem]">
-      <article className="mx-auto w-full max-w-3xl min-w-0">
-        <nav aria-label="Breadcrumb">
-          <ol className="type-label flex flex-wrap items-center gap-x-1.5 gap-y-2 text-muted-foreground">
-            <li>
-              <Link href="/notes/" className="rounded transition-colors hover:text-sky">
-                Notes
-              </Link>
-            </li>
-            {note.meta.folders.map((folder) => (
-              <li key={folder} className="flex items-center gap-1.5">
-                <ChevronRight aria-hidden="true" className="size-3" />
-                {folderTitle(folder)}
+      <div className="mx-auto w-full max-w-[54rem] min-w-0">
+        {/* A solid card behind the note, so the text never sits on the grid backdrop. */}
+        <article className="panel rounded-3xl px-5 py-8 sm:px-10 sm:py-12 lg:px-12">
+          <nav aria-label="Breadcrumb">
+            <ol className="type-label flex flex-wrap items-center gap-x-1.5 gap-y-2 text-muted-foreground">
+              <li>
+                <Link href="/notes/" className="rounded transition-colors hover:text-sky">
+                  Notes
+                </Link>
               </li>
-            ))}
-            <li className="flex items-center gap-1.5 text-foreground" aria-current="page">
-              <ChevronRight aria-hidden="true" className="size-3 text-muted-foreground" />
-              {note.meta.title}
-            </li>
-          </ol>
-        </nav>
+              {note.meta.folders.map((folder) => (
+                <li key={folder} className="flex items-center gap-1.5">
+                  <ChevronRight aria-hidden="true" className="size-3" />
+                  {folderTitle(folder)}
+                </li>
+              ))}
+              <li className="flex items-center gap-1.5 text-foreground" aria-current="page">
+                <ChevronRight aria-hidden="true" className="size-3 text-muted-foreground" />
+                {note.meta.title}
+              </li>
+            </ol>
+          </nav>
 
-        <h1 className="type-h1 mt-6 text-[clamp(2.125rem,4.6vw,3.5rem)] text-balance">{note.meta.title}</h1>
+          <h1 className="type-h1 mt-6 text-[clamp(2.125rem,4.6vw,3.5rem)] text-balance">{note.meta.title}</h1>
 
-        <div className="mt-8">
-          <Toc headings={headings} variant="inline" />
-        </div>
+          <div className="mt-8">
+            <Toc headings={headings} variant="inline" />
+          </div>
 
-        <div className="note-prose mt-8">{content}</div>
+          <div className="note-prose mt-8">{content}</div>
+        </article>
 
-        <nav aria-label="More notes" className="mt-16 grid gap-4 border-t border-line pt-8 sm:grid-cols-2">
+        <nav aria-label="More notes" className="mt-8 grid gap-4 sm:grid-cols-2">
           {previous ? (
             <Link href={previous.href} className="group/prev rounded-3xl outline-offset-4">
               <Panel surface="glass" className="flex h-full flex-col gap-2 p-5 transition-shadow duration-500 group-hover/prev:shadow-glow">
@@ -88,7 +91,7 @@ export default async function NotePage({ params }: Props) {
             </Link>
           )}
         </nav>
-      </article>
+      </div>
 
       <aside>
         <Toc headings={headings} variant="side" />
