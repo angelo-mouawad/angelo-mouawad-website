@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Toc } from "@/components/world/notes/Toc";
 import { MonoLabel, Panel } from "@/components/world/primitives";
 import { renderNote } from "@/lib/notes/render";
-import { getAllNotes, getNote } from "@/lib/notes/source";
+import { folderTitle, getAllNotes, getNote } from "@/lib/notes/source";
 
 type Props = { params: Promise<{ slug: string[] }> };
 
@@ -20,11 +20,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const note = getNote((await params).slug);
   return { title: note ? `${note.meta.title} | Notes | Angelo Mouawad` : "Notes | Angelo Mouawad" };
 }
-
-const humanise = (folder: string) => {
-  const words = folder.replace(/[-_]+/g, " ");
-  return words.charAt(0).toUpperCase() + words.slice(1);
-};
 
 export default async function NotePage({ params }: Props) {
   const note = getNote((await params).slug);
@@ -49,7 +44,7 @@ export default async function NotePage({ params }: Props) {
             {note.meta.folders.map((folder) => (
               <li key={folder} className="flex items-center gap-1.5">
                 <ChevronRight aria-hidden="true" className="size-3" />
-                {humanise(folder)}
+                {folderTitle(folder)}
               </li>
             ))}
             <li className="flex items-center gap-1.5 text-foreground" aria-current="page">

@@ -63,7 +63,9 @@ function localPaths(note: NoteMeta) {
   return (tree: Root) =>
     walk(tree, (element) => {
       if (element.tagName === "img" && relative(element.properties.src)) {
-        element.properties.src = [ASSET_BASE, ...note.folders, element.properties.src.replace(/^\.\//, "")].join("/");
+        // Folder names can contain spaces ("2 Python"), so every segment is URL encoded.
+        const file = decodeURI(element.properties.src.replace(/^\.\//, ""));
+        element.properties.src = [ASSET_BASE, ...note.folders.map(encodeURIComponent), encodeURI(file)].join("/");
       }
       if (element.tagName === "a" && relative(element.properties.href) && /\.mdx?(#|$)/.test(element.properties.href)) {
         element.properties.href = resolveNoteLink(note, element.properties.href) ?? element.properties.href;

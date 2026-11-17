@@ -9,7 +9,7 @@ import { getAllNotes, getTree, type TreeNode } from "@/lib/notes/source";
 
 export const metadata: Metadata = {
   title: "Notes | Angelo Mouawad",
-  description: "Study notes by Angelo Mouawad on maths, algorithms and machine learning.",
+  description: "Study notes by Angelo Mouawad on programming, data science, databases, Linux and history.",
 };
 
 const filesIn = (node: TreeNode): { title: string; href: string }[] => (node.type === "file" ? [{ title: node.title, href: node.href }] : node.children.flatMap(filesIn));

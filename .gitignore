@@ -62,3 +62,6 @@ Thumbs.db
 
 # copied from the notes folder on every dev and build
 /public/notes-assets/
+
+# the notes come from the separate notes repo: a junction to the vault locally, a checkout in CI
+/content/notes

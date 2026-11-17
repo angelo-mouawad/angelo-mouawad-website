@@ -2,15 +2,10 @@ import { ArrowRight, FileText, Image as ImageIcon, Type, WholeWord } from "lucid
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Panel } from "@/components/world/primitives";
-import { getAllNotes, getNote } from "@/lib/notes/source";
+import { folderTitle, getAllNotes, getNote } from "@/lib/notes/source";
 
 const IMAGE = /!\[[^\]]*\]\([^)]+\)|<img\b|<svg\b/gi;
 const number = new Intl.NumberFormat("en");
-
-const humanise = (folder: string) => {
-  const words = folder.replace(/[-_]+/g, " ");
-  return words.charAt(0).toUpperCase() + words.slice(1);
-};
 
 /** Counts what is written in one note. Drawings and image syntax are counted as images, not as text. */
 function measure(markdown: string) {
@@ -68,7 +63,7 @@ export function NotesStats() {
                 <span className="type-label text-sky max-sm:hidden">{String(index + 1).padStart(2, "0")}</span>
                 <span className="flex min-w-0 flex-col gap-1">
                   <span className="truncate font-display text-base font-semibold tracking-tight">{note.meta.title}</span>
-                  <span className="type-small truncate text-[0.8125rem]">{note.meta.folders.map(humanise).join(" / ") || "Loose note"}</span>
+                  <span className="type-small truncate text-[0.8125rem]">{note.meta.folders.map(folderTitle).join(" / ") || "Loose note"}</span>
                 </span>
                 <span aria-hidden="true" className="block h-2 overflow-hidden rounded-full bg-sunk">
                   <span className="block h-full rounded-full bg-[image:var(--gradient-aurora)]" style={{ width: `${Math.max(2, (note.words / most) * 100)}%` }} />

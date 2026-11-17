@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Sent by the notes repo when notes change, so the site rebuilds with them
+  repository_dispatch:
+    types: [notes-updated]
 
 permissions:
   contents: read
@@ -20,6 +23,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # The notes live in their own repo and are read from content/notes at build time
+      - uses: actions/checkout@v4
+        with:
+          repository: angelo-mouawad/angelo-mouawad-notes
+          path: content/notes
 
       - uses: actions/setup-node@v4
         with:

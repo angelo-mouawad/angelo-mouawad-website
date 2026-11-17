@@ -39,6 +39,20 @@ const humanise = (name: string) => {
   return words.charAt(0).toUpperCase() + words.slice(1);
 };
 
+/** Folders may start with a number that only sets their order, for example "2 Python". */
+const ORDER_PREFIX = /^\d+[\s._-]+/;
+
+/** The display name of a folder on disk: "2 Python" becomes "Python". */
+export const folderTitle = (name: string) => humanise(name.replace(ORDER_PREFIX, ""));
+
+const folderSlug = (name: string) => slugify(name.replace(ORDER_PREFIX, ""));
+
+/**
+ * Folders that hold no notes of their own. Graphs only shapes the Obsidian graph view,
+ * and images folders hold diagrams (any stray markdown in them is not a note).
+ */
+const IGNORED_FOLDERS = new Set(["graphs", "images", "attachments", "assets"]);
+
 function readMeta(file: string, folders: string[], slug: string[]): NoteMeta {
   const { data, content } = matter(fs.readFileSync(file, "utf8"));
   const heading = content.match(/^#\s+(.+)$/m)?.[1]?.trim();
@@ -62,10 +76,15 @@ function scan(dir: string, folders: string[], slug: string[], root: boolean): Sc
   const tree: TreeNode[] = [];
   const notes: NoteMeta[] = [];
 
-  for (const entry of entries.filter((item) => item.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
-    const child = scan(path.join(dir, entry.name), [...folders, entry.name], [...slug, slugify(entry.name)], false);
+  const subfolders = entries
+    .filter((item) => item.isDirectory() && !IGNORED_FOLDERS.has(item.name.toLowerCase()))
+    // Numeric sort keeps "10 History" after "9 Linux", not after "1 General Notes".
+    .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+  for (const entry of subfolders) {
+    const folderPath = [...slug, folderSlug(entry.name)];
+    const child = scan(path.join(dir, entry.name), [...folders, entry.name], folderPath, false);
     if (child.notes.length === 0) continue;
-    tree.push({ type: "folder", name: entry.name, title: humanise(entry.name), slug: [...slug, slugify(entry.name)], children: child.tree });
+    tree.push({ type: "folder", name: entry.name, title: folderTitle(entry.name), slug: folderPath, children: child.tree });
     notes.push(...child.notes);
   }
 

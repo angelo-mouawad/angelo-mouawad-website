@@ -61,18 +61,24 @@ Services and process steps are in the same data file.
 
 ### Notes (/notes)
 
-Notes are markdown files in `content/notes`. Each folder becomes a folder in the sidebar and each `.md` file becomes its own page:
+Notes come from the separate [notes repo](https://github.com/angelo-mouawad/angelo-mouawad-notes), an Obsidian vault, and are read from `content/notes` at build time. That folder is not committed:
+
+- **Locally** it is a junction to the vault, so edits in Obsidian show up in `npm run dev`. Recreate it on a fresh clone with `mklink /J content
+otes ..\..\Obsidian` (from `cmd`, adjusting the path to wherever the vault lives), or set `NOTES_DIR=../path/to/vault` instead.
+- **In CI** the deploy workflow checks the notes repo out into `content/notes`. A `repository_dispatch` event of type `notes-updated` rebuilds the site when the notes change.
+
+Each top level folder becomes a folder on `/notes` and each `.md` file becomes its own page. A leading number on a folder only sets its order:
 
 ```
 content/notes/
-  math/
-    linear-algebra-basics.md   ->  /notes/math/linear-algebra-basics
-    probability-cheatsheet.md  ->  /notes/math/probability-cheatsheet
-  algorithms/
+  2 Python/
+    Pandas Library.md   ->  /notes/python/pandas-library
+    images/             diagrams, linked relatively as images/x.svg
+  10 History/
     ...
 ```
 
-To add a note, add a file. Optional frontmatter sets the title and position:
+Skipped: dot folders (`.obsidian`), the top level `README.md`, and folders named `Graphs`, `images`, `attachments` or `assets` (images inside them are still copied to the site). Optional frontmatter sets a note's title and position:
 
 ```md
 ---
@@ -81,13 +87,7 @@ order: 1
 ---
 ```
 
-Supported: headings, tables, task lists, code blocks with highlighting and a copy button, images and files beside the note (use relative paths), inline SVG, maths with `$...$` and `$$...$$`, links to other notes (`./other-note.md`) and callouts written as `> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]` or `> [!CAUTION]`.
-
-**Using the real notes repository.** Everything is read at build time from one folder, set in `src/lib/notes/source.ts`. Either check the notes repo out into `content/notes` (a git submodule works well), or point the build at it:
-
-```bash
-NOTES_DIR=../my-notes npm run build
-```
+Supported: headings, tables, task lists, code blocks with highlighting and a copy button, images and files beside the note (use relative paths), inline SVG, maths with `$...$` and `$$...$$`, links to other notes (`./other-note.md`) and callouts written as `> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]` or `> [!CAUTION]`. Obsidian `[[wikilinks]]` are not resolved.
 
 ### A reading plan (/bible)
 
@@ -110,7 +110,7 @@ Models, textures and the HDRI are committed in `public/` already compressed. To 
 ## Folder structure
 
 ```
-content/notes/         sample notes (swap for the real notes repo)
+content/notes/         the notes vault (not committed, see Notes above)
 public/
   models/ textures/ hdri/   the room's 3D assets
   images/                   photos
