@@ -1,0 +1,260 @@
+/* Typography for rendered notes. */
+
+.note-prose {
+  color: var(--ink-soft);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+.note-prose > * + * {
+  margin-top: 1.25em;
+}
+
+.note-prose h2,
+.note-prose h3,
+.note-prose h4 {
+  font-family: var(--font-display), sans-serif;
+  color: var(--foreground);
+  line-height: 1.2;
+  scroll-margin-top: 6rem;
+}
+
+.note-prose h2 {
+  margin-top: 2.4em;
+  padding-bottom: 0.45em;
+  border-bottom: 1px solid var(--line);
+  font-size: 1.625rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.note-prose h3 {
+  margin-top: 1.9em;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.note-prose h4 {
+  margin-top: 1.6em;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.note-prose a {
+  color: var(--sky);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--sky) 35%, transparent);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--duration-fast);
+}
+
+.note-prose a:hover {
+  text-decoration-color: var(--sky);
+}
+
+.note-prose strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.note-prose ul,
+.note-prose ol {
+  padding-left: 1.4em;
+}
+
+.note-prose ul {
+  list-style: disc;
+}
+
+.note-prose ol {
+  list-style: decimal;
+}
+
+.note-prose li + li {
+  margin-top: 0.4em;
+}
+
+.note-prose li::marker {
+  color: var(--sky-bright);
+}
+
+.note-prose ul.contains-task-list {
+  padding-left: 0.2em;
+  list-style: none;
+}
+
+.note-prose input[type="checkbox"] {
+  margin-right: 0.55em;
+  accent-color: var(--sky);
+}
+
+.note-prose :not(pre) > code {
+  padding: 0.12em 0.38em;
+  border: 1px solid var(--line);
+  border-radius: 0.4em;
+  background: var(--sunk);
+  color: var(--foreground);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.875em;
+}
+
+.note-code {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--card);
+  box-shadow: var(--shadow-soft);
+}
+
+.note-code figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.5rem 0.4rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--sunk);
+}
+
+.note-copy {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.7rem;
+  border-radius: 0.6rem;
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast),
+    color var(--duration-fast);
+}
+
+.note-copy:hover {
+  background: var(--card);
+  color: var(--foreground);
+}
+
+.note-code pre {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  background: transparent !important;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+.note-table {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--card);
+}
+
+.note-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.note-table th {
+  padding: 0.7rem 1rem;
+  background: var(--sunk);
+  color: var(--muted-foreground);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.note-table td {
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.note-prose blockquote {
+  padding-left: 1rem;
+  border-left: 3px solid var(--sky-bright);
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.callout {
+  --tone: var(--sky);
+  padding: 0.95rem 1.15rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--tone) 28%, transparent);
+  border-left-width: 3px;
+  border-left-color: var(--tone);
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--tone) 7%, var(--card));
+}
+
+.callout > * + * {
+  margin-top: 0.5em;
+}
+
+.callout-title {
+  color: var(--tone);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.callout[data-callout="tip"] {
+  --tone: var(--positive);
+}
+
+.callout[data-callout="important"] {
+  --tone: #6d4fd6;
+}
+
+.callout[data-callout="warning"] {
+  --tone: var(--caution);
+}
+
+.callout[data-callout="caution"] {
+  --tone: var(--destructive);
+}
+
+.note-prose img,
+.note-prose > svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+}
+
+.note-prose > svg {
+  width: min(100%, 26rem);
+  padding: 0.5rem;
+  background: var(--card);
+}
+
+.note-prose hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.note-prose .katex-display {
+  margin: 0;
+  padding: 0.6rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.note-prose .katex {
+  color: var(--foreground);
+  font-size: 1.08em;
+}

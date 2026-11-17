@@ -1,128 +1,145 @@
-# Angelo Mouawad Personal Portfolio
+# Angelo Mouawad: Personal Website
 
-A cinematic, scroll-driven portfolio website built with Three.js. The experience opens inside a photorealistic 3D bedroom workspace at night, dollies toward the desk as you scroll, and dives *through* the monitor screen into a digital world where the portfolio content lives.
+A late night room you can scroll through. The camera moves from the doorway to the desk and into the monitor, and past the screen the site opens into a brighter world.
 
-**Live site:** [angelomouawad.com](https://angelomouawad.com)
-
----
-
-## Overview
-
-The site is a single continuous camera move split into two acts, driven entirely by scroll position.
-
-**Act I The Room.** A physically lit night scene: a desk setup with monitor, PC, keyboard, mouse and speakers, a window with venetian blinds looking onto a blurred city skyline, a wall-mounted TV running a console interface, shelves, plants, a mini fridge and a PS5. Warm LED strips and a ceiling fixture light the room while a spotlight casts real blind-striped shadows across the floor. As the camera approaches, the desk chair swivels and docks itself at the desk.
-
-**Act II The Digital World.** After passing through the monitor glass, the camera flies through a particle tunnel past holographic project capsules, a pulsing network-node field, the socials section, and a final pull-back shot.
-
-## Features
-
-- Scroll-scrubbed camera on a Catmull-Rom spline with eased momentum
-- Seamless screen-dive transition, the monitor renders the same hero layout you land on, so the scene swap is invisible
-- Real-time lighting: PMREM environment reflections, shadow-casting spotlight through the window, volumetric light shafts, animated candle and TV flicker
-- 12 GLB props auto-normalized at load (scaled, centered, seated on their surface)
-- Procedurally generated textures, the city skyline, screen UIs, chalk-drawn code, wood, rug and posters are all drawn to canvas at runtime, no image files needed
-- Mouse parallax; the football on the rug spins to follow the cursor
-- Optional ambient room tone (filtered brown noise, generated with the Web Audio API)
-- Mobile fallback: reduced particle counts, shadows and antialiasing disabled, lower pixel ratio
-- Respects `prefers-reduced-motion`
-
-## Tech Stack
-
-| | |
+| Where | What |
 |---|---|
-| **3D** | Three.js r128, GLTFLoader |
-| **Animation** | GSAP 3.12.5 + ScrollTrigger |
-| **Typography** | Archivo, Archivo Black, JetBrains Mono |
-| **Audio** | Web Audio API |
-| **Hosting** | GitHub Pages |
+| `/` | The room, then the monitor scene: about, projects and contact |
+| `/websites` | Web design services and live client work |
+| `/notes` | Study notes rendered from markdown |
+| `/bible` | The King James Bible with reading plans, highlights, notes and progress |
+| `/theme` | Reference page for the shared design system (not indexed) |
 
-No build step, no bundler, no framework. The site is plain HTML, CSS and JavaScript.
+In the room, three objects are links: the notebooks (`/notes`), the Bible (`/bible`) and the studio poster (`/websites`). The dock at the bottom leads to the same places.
 
-## Project Structure
+## Stack
 
-```
-.
-├── index.html      # entire site, markup, styles, scene code
-├── CNAME           # custom domain for GitHub Pages
-└── objects/        # GLB models loaded at runtime
-    ├── gaming_chair.glb
-    ├── gaming_pc.glb
-    ├── gaming_mouse.glb
-    ├── gaming_laptop.glb
-    ├── desk_lamp.glb
-    ├── mini_fridge.glb
-    ├── classic_ps5.glb
-    ├── cameraman_backpack.glb
-    ├── ceiling_light_round.glb
-    ├── plant.glb
-    ├── banana_plant.glb
-    └── low_poly_cartoon_football_ball_free.glb
-```
+Next.js (App Router, TypeScript, static export), React Three Fiber with drei and postprocessing, Lenis for scrolling, Motion for scroll driven animation and transitions, GSAP for camera moves, Tailwind and shadcn/ui, zustand for state. Notes use unified (remark, rehype), KaTeX and Shiki.
 
-## Running Locally
-
-The models are fetched at runtime, so the page needs to be served over HTTP — opening `index.html` directly from the filesystem will load the page but not the props.
+## Run it
 
 ```bash
-git clone https://github.com/angelo-mouawad/angelo-mouawad-website.git
-cd angelo-mouawad-website
-python3 -m http.server 8000
+npm install
+npm run dev
 ```
 
-Then open `http://localhost:8000`.
+Open http://localhost:3000.
 
-Any static server works, `npx serve`, VS Code's Live Server extension, etc.
+## Build the static export
 
-## How It Works
-
-### Scroll Timeline
-
-A tall spacer element (`#scrollSpace`, 1500vh) provides scroll distance. ScrollTrigger maps the page's scroll position to a normalized progress value `0 → 1`, which is smoothed each frame for momentum. Every animation reads from that single value:
-
-| Progress | Section |
-|---|---|
-| `0.00 – 0.30` | The Room, camera dollies toward the desk |
-| `0.30` | Screen dive, flash transition, scene swap |
-| `0.33 – 0.46` | Hero |
-| `0.45 – 0.53` | Tunnel dive |
-| `0.53 – 0.79` | Projects (Alpha, Beta, Gamma) |
-| `0.79 – 0.85` | Network transition |
-| `0.85 – 0.93` | Socials |
-| `0.93 – 1.00` | Ending |
-
-The two acts are separate `THREE.Scene` objects sharing one camera. Only one renders per frame, so the off-screen act costs nothing.
-
-### Loading Models
-
-Props are declared in a filename map and placed with a single helper:
-
-```js
-placeGLB('gaming_chair', { pos: [-.46, 0, -.98], height: 1.46, rotY: .35 });
+```bash
+npm run build
 ```
 
-Each model is fetched once, cached, and cloned for repeat instances (the small plant appears five times from one download). On load it's scaled to a target height in metres, centered horizontally, and seated so its base rests exactly on the floor, desk or shelf, with `topAlign` and `centerPivot` options for ceiling-mounted and free-spinning objects.
+The site is written to `out/`, which is everything GitHub Pages needs. `public/CNAME` and `public/.nojekyll` are copied in, so the custom domain keeps working. A small `postbuild` step copies the route prefetch files to the names the browser asks for. To preview the export:
 
-### Adding or Swapping a Prop
+```bash
+npx serve out
+```
 
-1. Drop the `.glb` into `objects/`
-2. Add an entry to `MODEL_FILES` in `index.html`
-3. Call `placeGLB()` with a position and height
+## How to add things
 
-## Performance
+### A project (monitor scene)
 
-- Targets 60 FPS on modern hardware
-- `index.html` is ~144 KB, so the page and loading screen appear immediately while models stream in
-- Models are cached separately by the browser, so code changes don't force a re-download
-- Instanced geometry for the keyboard keycaps; shared materials across repeated props
+Add an entry to `src/data/projects.ts`. Numbering, the counter, the 3D capsules and the tech marquee all follow that list. The three "coming soon" slots at the bottom are ordinary entries with `status: "soon"`: replace the text, add `tech` and `links`, and delete the `status` line.
 
-## Credits
+The about text, facts and contact links are in `src/data/profile.ts`. Facts marked `todo: true` show a dashed TODO tag until you fill them in.
 
-3D models sourced from Sketchfab under their respective licenses. Fonts from Google Fonts. Three.js and GSAP via cdnjs.
+The commit skyline reads `src/data/contributions.json`. Refresh it with:
 
-## License
+```bash
+npm run contributions
+```
 
-The source code in this repository is available for reference and learning. The 3D models in `objects/` remain under their original licenses. Please don't republish the site as your own portfolio.
+### A website (/websites)
 
+1. Add an entry to `src/data/websites.ts` (name, URL, repo, description, stack).
+2. Add its slug and URL to the list in `scripts/site-shots.mjs`.
+3. Run `npm run site-shots` to capture `public/sites/<slug>-desktop.webp` and `<slug>-mobile.webp`.
+
+Services and process steps are in the same data file.
+
+### Notes (/notes)
+
+Notes are markdown files in `content/notes`. Each folder becomes a folder in the sidebar and each `.md` file becomes its own page:
+
+```
+content/notes/
+  math/
+    linear-algebra-basics.md   ->  /notes/math/linear-algebra-basics
+    probability-cheatsheet.md  ->  /notes/math/probability-cheatsheet
+  algorithms/
+    ...
+```
+
+To add a note, add a file. Optional frontmatter sets the title and position:
+
+```md
 ---
+title: Linear algebra basics
+order: 1
+---
+```
 
-Built by **Angelo Mouawad**, Computer Science Student.
+Supported: headings, tables, task lists, code blocks with highlighting and a copy button, images and files beside the note (use relative paths), inline SVG, maths with `$...$` and `$$...$$`, links to other notes (`./other-note.md`) and callouts written as `> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]` or `> [!CAUTION]`.
+
+**Using the real notes repository.** Everything is read at build time from one folder, set in `src/lib/notes/source.ts`. Either check the notes repo out into `content/notes` (a git submodule works well), or point the build at it:
+
+```bash
+NOTES_DIR=../my-notes npm run build
+```
+
+### A reading plan (/bible)
+
+Add a JSON file to `src/lib/bible/data/readingPlans` and list it in the two places at the top of `src/lib/bible/data/plans.ts`. The file format is the same one the standalone Lamp app uses.
+
+## The contact form
+
+The form on `/websites` uses [Web3Forms](https://web3forms.com), which works on a static host. Create a free access key there, copy `.env.example` to `.env.local` and fill it in:
+
+```
+NEXT_PUBLIC_WEB3FORMS_KEY=your-access-key
+```
+
+The key is public by design. It is read at build time, so it also has to be set wherever the site is built. Without a key the form still works: it opens the visitor's mail app with the message filled in.
+
+## Assets
+
+Models, textures and the HDRI are committed in `public/` already compressed. To rebuild them from source run `npm run assets`. Licences and authors are in [CREDITS.md](CREDITS.md).
+
+## Folder structure
+
+```
+content/notes/         sample notes (swap for the real notes repo)
+public/
+  models/ textures/ hdri/   the room's 3D assets
+  images/                   photos
+  sites/                    screenshots for /websites
+  bible-data/kjv/           the King James text, one file per book
+scripts/               asset pipeline, screenshots, contributions, notes assets
+src/
+  app/                 routes only: each page hands over to a component
+  components/
+    room/              the 3D room
+      scene/ models/ interactions/ camera/
+      ui/              loader and overlay
+    world/             the shared design system and the pages beyond the room
+      home/ websites/ notes/ bible/
+    ui/                shadcn primitives: button, dialog, sheet
+    vendor/            third party components used as shipped
+  data/                profile, projects, websites, contributions
+  hooks/               hooks shared across the site
+  lib/                 logic with no UI
+    bible/             saved data, progress, search, plans, routing
+    notes/             markdown loader and renderer
+  store/               room state
+```
+
+## How it fits together
+
+- **One design system.** Tokens, type styles and surfaces live in `src/app/globals.css`. Buttons, dialogs and sheets are in `components/ui`, the rest (panels, chips, links, reveals, the dock, the page shell) in `components/world`. `/theme` shows all of it.
+- **Scroll on the home page.** `SmoothScroll` turns the scroll position into progress through the room, then a dive value while the screen opens. Each section of the monitor scene reports its own progress to `lib/scroll.ts`, which the DOM and the 3D layer both read.
+- **Two canvases.** The room stops rendering once you are inside the monitor, and a lighter transparent canvas takes over.
+- **Transitions.** Leaving the room, a point of light grows to fill the screen (`LightBloom`). Every page beyond it starts as light and opens outward (`LightGate`).
+- **Bible.** The screens are in `components/world/bible` and use the shared design system. The logic in `src/lib/bible` has no UI. Reading data is saved in the visitor's browser under `lamp.bibleApp.v1`, in the same shape the standalone Lamp app uses under `bibleApp.v1`. Views are addressed in the URL hash, for example `/bible/#/bible/JHN/3/16`. Progress is always drawn with `ProgressRing` from `components/world/bible/ui.tsx`.
+- **Reduced motion.** Pinned and scrubbed sections fall back to plain stacked layouts, and Lenis, the intro and the page transitions are switched off.

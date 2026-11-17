@@ -1,0 +1,113 @@
+/**
+ * Every project shown in the monitor scene. To add one, add an entry here.
+ * Nothing else needs to change: numbering, counts and the tech marquee all follow this list.
+ */
+export interface Project {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  tech: string[];
+  links: { label: string; href: string }[];
+  /** Leave out for a finished project. "soon" renders a reserved slot. */
+  status?: "soon";
+}
+
+export const PROJECTS: Project[] = [
+  {
+    id: "flow-engine",
+    title: "Flow Engine",
+    category: "Backend architecture",
+    description:
+      "A configurable workflow engine. You define a flow once, trigger it over HTTP, and it walks its own steps, validating requests, pausing while people approve them, and pushing notifications over WebSocket in real time. The runner stores its position when it stalls, so resuming is restart-safe without a scheduler.",
+    tech: ["Java 21", "Spring Boot", "Vue 3", "MongoDB", "WebSocket", "Docker"],
+    links: [{ label: "GitHub", href: "https://github.com/angelo-mouawad/flow-engine" }],
+  },
+  {
+    id: "gaffer",
+    title: "Gaffer",
+    category: "Machine learning, AI",
+    description:
+      "Premier League predictions behind one dashboard. A neural network trained on twenty seasons of results is merged with a language model that reads this week's team news and weighs each absence by how much that player actually plays. It also prices players against Transfermarkt and finds the closest stylistic replacement for anyone in the league.",
+    tech: ["Python", "PyTorch", "XGBoost", "FastAPI", "Jupyter", "LLM"],
+    links: [{ label: "GitHub", href: "https://github.com/angelo-mouawad/football-prediction-project" }],
+  },
+  {
+    id: "restaurant-management",
+    title: "Restaurant Management System",
+    category: "Full stack, team project",
+    description:
+      "A full-stack app for running the day-to-day side of a restaurant: stock tracking, shift scheduling, and notifications pushed to the people affected. Built with a Scrum team at UCLL: a Spring Boot REST API on one side, Next.js on the other, and JWT auth in an httpOnly cookie between them.",
+    tech: ["Java 21", "Spring Boot", "Next.js 15", "React 19", "PostgreSQL", "TypeScript"],
+    links: [{ label: "GitHub", href: "https://github.com/angelo-mouawad/restaurant-management-system-project" }],
+  },
+  {
+    id: "finger-dragon",
+    title: "Finger Dragon",
+    category: "Computer vision, games",
+    description:
+      "A webcam-controlled arcade game. Your index finger flies the dragon and pinching it to your thumb breathes fire, while enemy dragons chase you and shoot back. Hand tracking runs on its own thread so the game never stalls waiting on a camera frame, and it degrades gracefully when there's no webcam at all.",
+    tech: ["Python", "Pygame", "MediaPipe", "OpenCV"],
+    links: [{ label: "GitHub", href: "https://github.com/angelo-mouawad/finger-dragon-game" }],
+  },
+  {
+    id: "samar-holidays",
+    title: "Samar Holidays",
+    category: "Client work, live",
+    description:
+      "Marketing site for a travel agency in Kaslik, Lebanon. One self-contained HTML file, with no framework, no build step, no package manager. Package cards flip on hover and on tap so they work on phones, and the hero title measures itself and rescales to stay on one line at any width.",
+    tech: ["HTML", "CSS", "JavaScript"],
+    links: [
+      { label: "Live site", href: "https://samarholidays.com/" },
+      { label: "GitHub", href: "https://github.com/angelo-mouawad/samar-holidays-website" },
+    ],
+  },
+  {
+    id: "echoes-events",
+    title: "Echoes Events",
+    category: "Client work, live",
+    description:
+      "Site for a Beirut event planning and production company covering weddings, corporate galas and concerts. Six scrolling sections with dot navigation that highlights wherever you are, a full-bleed video hero and showreel, and PHP handlers behind the enquiry and job application forms.",
+    tech: ["HTML", "CSS", "JavaScript", "PHP"],
+    links: [
+      { label: "Live site", href: "https://eventswithechoes.com/" },
+      { label: "GitHub", href: "https://github.com/angelo-mouawad/echoes-events-website" },
+    ],
+  },
+
+  // Reserved slots. Replace the text, add tech and links, and delete the status line.
+  {
+    id: "coming-soon-1",
+    title: "Next project",
+    category: "Coming soon",
+    description: "This slot is reserved for something I'm working on.",
+    tech: [],
+    links: [],
+    status: "soon",
+  },
+  {
+    id: "coming-soon-2",
+    title: "Next project",
+    category: "Coming soon",
+    description: "This slot is reserved for something I'm working on.",
+    tech: [],
+    links: [],
+    status: "soon",
+  },
+  {
+    id: "coming-soon-3",
+    title: "Next project",
+    category: "Coming soon",
+    description: "This slot is reserved for something I'm working on.",
+    tech: [],
+    links: [],
+    status: "soon",
+  },
+];
+
+/** Every technology used across the finished projects, most used first. */
+export function techStack() {
+  const counts = new Map<string, number>();
+  for (const project of PROJECTS) for (const tech of project.tech) counts.set(tech, (counts.get(tech) ?? 0) + 1);
+  return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([tech]) => tech);
+}

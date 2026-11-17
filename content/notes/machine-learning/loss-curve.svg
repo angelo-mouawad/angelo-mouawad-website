@@ -1,0 +1,14 @@
+<svg viewBox="0 0 480 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A bowl shaped loss curve with points stepping down to its lowest point">
+  <rect width="480" height="240" rx="14" fill="#ffffff"/>
+  <path d="M60 40 C140 230 340 230 420 40" fill="none" stroke="#2f9bff" stroke-width="3" stroke-linecap="round"/>
+  <g fill="#0b6bdc">
+    <circle cx="92" cy="92" r="6"/><circle cx="132" cy="140" r="6"/><circle cx="176" cy="168" r="6"/><circle cx="218" cy="180" r="6"/>
+  </g>
+  <g fill="none" stroke="#52627a" stroke-width="1.5" stroke-dasharray="4 4">
+    <path d="M92 92 L132 140"/><path d="M132 140 L176 168"/><path d="M176 168 L218 180"/>
+  </g>
+  <circle cx="240" cy="183" r="7" fill="none" stroke="#12b5e5" stroke-width="2.5"/>
+  <g font-family="ui-monospace, monospace" font-size="12" fill="#2c3a4f">
+    <text x="224" y="210">minimum</text><text x="60" y="30">loss</text><text x="388" y="225">θ</text>
+  </g>
+</svg>

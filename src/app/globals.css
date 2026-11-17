@@ -1,0 +1,500 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-heading: var(--font-display);
+  --color-ink-soft: var(--ink-soft);
+  --color-sunk: var(--sunk);
+  --color-ice: var(--ice);
+  --color-sky: var(--sky);
+  --color-sky-bright: var(--sky-bright);
+  --color-cyan: var(--cyan);
+  --color-glow: var(--glow);
+  --color-positive: var(--positive);
+  --color-caution: var(--caution);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --ease-out-expo: var(--ease-out);
+  --ease-in-out-cubic: var(--ease-in-out);
+  --shadow-soft: var(--shadow-soft);
+  --shadow-lift: var(--shadow-lift);
+  --shadow-glow: var(--shadow-glow);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/*
+ * Design tokens.
+ * The default scope is the bright world beyond the room. The .dark scope is its night
+ * counterpart, used by the room's overlay UI and by the Bible reader's dark mode.
+ */
+:root {
+  color-scheme: light;
+
+  --background: #f4f7fb;
+  --foreground: #0b1220;
+  --card: #ffffff;
+  --card-foreground: #0b1220;
+  --popover: #ffffff;
+  --popover-foreground: #0b1220;
+  --primary: #0b1220;
+  --primary-foreground: #f4f7fb;
+  --secondary: #e9eff6;
+  --secondary-foreground: #0b1220;
+  --muted: #e9eff6;
+  --muted-foreground: #52627a;
+  --accent: #e1f0fb;
+  --accent-foreground: #0a57b4;
+  --destructive: #d92d20;
+  --border: rgb(11 18 32 / 0.1);
+  --input: rgb(11 18 32 / 0.16);
+  --ring: #2f9bff;
+  --radius: 0.875rem;
+
+  --ink-soft: #2c3a4f;
+  --sunk: #eaf0f7;
+  --ice: #e1f0fb;
+  --sky: #0b6bdc;
+  --sky-bright: #2f9bff;
+  --cyan: #12b5e5;
+  --glow: #6fe3ff;
+  --positive: #0b8f63;
+  --caution: #a8650b;
+
+  --glass: rgb(255 255 255 / 0.58);
+  --glass-strong: rgb(255 255 255 / 0.84);
+  --glass-edge: rgb(255 255 255 / 0.95);
+  --line: rgb(11 18 32 / 0.08);
+  --line-strong: rgb(11 18 32 / 0.16);
+  --grid-line: rgb(18 80 150 / 0.07);
+
+  --shadow-soft: 0 1px 0 rgb(255 255 255 / 0.9) inset, 0 1px 2px rgb(11 18 32 / 0.04), 0 12px 32px -16px rgb(20 60 120 / 0.18);
+  --shadow-lift: 0 1px 0 rgb(255 255 255 / 0.9) inset, 0 2px 4px rgb(11 18 32 / 0.05), 0 28px 60px -24px rgb(20 60 120 / 0.28);
+  --shadow-glow: 0 0 0 1px rgb(47 155 255 / 0.25), 0 10px 40px -10px rgb(47 155 255 / 0.45);
+
+  --gradient-aurora: linear-gradient(120deg, #6fe3ff 0%, #4da3ff 50%, #8fb8ff 100%);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 180ms;
+  --duration-base: 420ms;
+  --duration-slow: 900ms;
+
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --section: clamp(5rem, 12vw, 10rem);
+
+  --chart-1: #2f9bff;
+  --chart-2: #12b5e5;
+  --chart-3: #8fb8ff;
+  --chart-4: #0b6bdc;
+  --chart-5: #0b1220;
+  --sidebar: #eef3f9;
+  --sidebar-foreground: #0b1220;
+  --sidebar-primary: #0b1220;
+  --sidebar-primary-foreground: #f4f7fb;
+  --sidebar-accent: #e1f0fb;
+  --sidebar-accent-foreground: #0a57b4;
+  --sidebar-border: rgb(11 18 32 / 0.1);
+  --sidebar-ring: #2f9bff;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: #080c14;
+  --foreground: #e9eef4;
+  --card: #101826;
+  --card-foreground: #e9eef4;
+  --popover: #101826;
+  --popover-foreground: #e9eef4;
+  --primary: #e9eef4;
+  --primary-foreground: #0b1220;
+  --secondary: #172233;
+  --secondary-foreground: #e9eef4;
+  --muted: #172233;
+  --muted-foreground: #96a3b7;
+  --accent: #13273f;
+  --accent-foreground: #8fd3ff;
+  --destructive: #ff6b5e;
+  --border: rgb(255 255 255 / 0.1);
+  --input: rgb(255 255 255 / 0.16);
+  --ring: #6fe3ff;
+
+  --ink-soft: #c5cfdc;
+  --sunk: #0c121d;
+  --ice: #13273f;
+  --sky: #6db8ff;
+  --sky-bright: #4da3ff;
+  --cyan: #6fe3ff;
+  --glow: #6fe3ff;
+  --positive: #4fd1a1;
+  --caution: #f0b65a;
+
+  --glass: rgb(16 24 38 / 0.6);
+  --glass-strong: rgb(16 24 38 / 0.88);
+  --glass-edge: rgb(255 255 255 / 0.08);
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.18);
+  --grid-line: rgb(111 227 255 / 0.06);
+
+  --shadow-soft: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 16px 36px -18px rgb(0 0 0 / 0.7);
+  --shadow-lift: 0 1px 0 rgb(255 255 255 / 0.06) inset, 0 30px 60px -24px rgb(0 0 0 / 0.8);
+  --shadow-glow: 0 0 0 1px rgb(111 227 255 / 0.3), 0 10px 40px -10px rgb(111 227 255 / 0.4);
+
+  --sidebar: #0c121d;
+  --sidebar-foreground: #e9eef4;
+  --sidebar-primary: #e9eef4;
+  --sidebar-primary-foreground: #0b1220;
+  --sidebar-accent: #13273f;
+  --sidebar-accent-foreground: #8fd3ff;
+  --sidebar-border: rgb(255 255 255 / 0.1);
+  --sidebar-ring: #6fe3ff;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    font-family: var(--font-body), system-ui, sans-serif;
+    background: var(--background);
+    overscroll-behavior-y: none;
+  }
+  /* The home page opens in the dark room, so paint it dark before any script runs. */
+  html:has([data-world="room"]) {
+    background: #07090d;
+  }
+  body {
+    @apply text-foreground;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: rgb(47 155 255 / 0.22);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+}
+
+:root {
+  --room-bg: #07090d;
+  --room-ink: #e9eef4;
+  --room-dim: #8b95a5;
+  --room-cyan: #6fe3ff;
+  --room-warm: #ffb36b;
+}
+
+.room-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  touch-action: pan-y;
+}
+
+.room-canvas canvas {
+  touch-action: pan-y;
+}
+
+.room-scroll {
+  height: 520vh;
+  height: 520lvh;
+}
+
+.lvh-probe {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100vh;
+  height: 100lvh;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.object-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px 8px 14px;
+  border: 1px solid rgb(111 227 255 / 0.35);
+  border-radius: 999px;
+  background: rgb(7 9 13 / 0.78);
+  backdrop-filter: blur(10px);
+  color: var(--room-ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  animation: label-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.object-label b {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.object-label span {
+  color: var(--room-cyan);
+}
+
+/* Playful objects that do something in place and do not navigate. */
+.object-label-toy {
+  border-color: rgb(255 179 107 / 0.4);
+}
+
+.object-label-toy span {
+  color: var(--room-warm);
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+
+@keyframes label-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .object-label {
+    animation: none;
+  }
+}
+
+html.room-page {
+  scrollbar-width: none;
+}
+
+html.room-page::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- The bright world: type, surfaces and effects ---------- */
+
+.world {
+  font-family: var(--font-body), system-ui, sans-serif;
+  color: var(--foreground);
+  background: var(--background);
+}
+
+.type-display {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(3rem, 9vw, 8rem);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.type-h1 {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.type-h2 {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.875rem, 3.4vw, 3rem);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.type-h3 {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.375rem, 1.8vw, 1.625rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.type-lead {
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+.type-body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.type-small {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+.type-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.text-aurora {
+  background: linear-gradient(110deg, #0b6bdc 0%, #12b5e5 55%, #2f9bff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--shadow-soft), 0 0 0 1px var(--line);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
+}
+
+.glass-strong {
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--shadow-lift), 0 0 0 1px var(--line);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  backdrop-filter: blur(24px) saturate(1.5);
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+}
+
+.hairline {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-strong) 20%, var(--line-strong) 80%, transparent);
+}
+
+.world-grid {
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 85%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 85%);
+}
+
+.world-glow {
+  background:
+    radial-gradient(60rem 40rem at 12% -10%, rgb(111 227 255 / 0.32), transparent 60%),
+    radial-gradient(50rem 36rem at 95% 8%, rgb(143 184 255 / 0.3), transparent 62%),
+    radial-gradient(46rem 30rem at 50% 110%, rgb(225 240 251 / 0.9), transparent 60%);
+}
+
+.dark .world-glow {
+  background:
+    radial-gradient(60rem 40rem at 12% -10%, rgb(77 163 255 / 0.16), transparent 60%),
+    radial-gradient(50rem 36rem at 95% 8%, rgb(111 227 255 / 0.1), transparent 62%);
+}
+
+/* Corner ticks, borrowed from the old HUD panels. */
+.ticks {
+  position: relative;
+}
+
+.ticks::before,
+.ticks::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  border-color: var(--sky-bright);
+  opacity: 0.7;
+}
+
+.ticks::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1.5px solid;
+  border-left: 1.5px solid;
+  border-top-left-radius: inherit;
+}
+
+.ticks::after {
+  right: -1px;
+  bottom: -1px;
+  border-right: 1.5px solid;
+  border-bottom: 1.5px solid;
+  border-bottom-right-radius: inherit;
+}
+
+.link-line {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+  transition: background-size var(--duration-base) var(--ease-out);
+}
+
+.link-line:hover,
+.link-line:focus-visible {
+  background-position: 100% 100%;
+  background-size: 0% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link-line {
+    transition: none;
+  }
+}
