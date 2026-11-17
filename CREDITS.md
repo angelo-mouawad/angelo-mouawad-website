@@ -30,7 +30,6 @@ Reused from the previous version of the site. Licensed under [CC BY 4.0](https:/
 |---|---|---|---|
 | `gaming_chair.glb` | Gaming Chair | [9arts](https://sketchfab.com/9arts) | https://sketchfab.com/3d-models/gaming-chair-6ca81f60846648609b4208c9e7f31b14 |
 | `gaming_mouse.glb` | Gaming Mouse | [attix84work](https://sketchfab.com/attix84work) | https://sketchfab.com/3d-models/gaming-mouse-5847669dfe3d4ba8b59e69dc64bc09c1 |
-| `gaming_laptop.glb` | Gaming Laptop | [GeniusPilot2016](https://sketchfab.com/GeniusPilot2016) | https://sketchfab.com/3d-models/gaming-laptop-800e9be65a78484f8193c4bfbc318b3b |
 | `classic_ps5.glb` | classic ps5 | [jei3323](https://sketchfab.com/jei3323) | https://sketchfab.com/3d-models/classic-ps5-cb2aa3e4390047aeac70253960bbc7b3 |
 | `cameraman_backpack.glb` | Cameraman Backpack | [QuickDriftVR](https://sketchfab.com/QuickDriftVR) | https://sketchfab.com/3d-models/cameraman-backpack-64a48b2f2e3445a0a13cfea3560fbc6c |
 

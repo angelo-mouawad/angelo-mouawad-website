@@ -15,7 +15,6 @@ export const MODELS = [
   "football",
   "gamepad",
   "gaming_chair",
-  "gaming_laptop",
   "gaming_mouse",
   "gaming_pc",
   "modern_wooden_cabinet",

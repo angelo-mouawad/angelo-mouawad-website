@@ -7,56 +7,13 @@ import * as THREE from "three";
 import { Model } from "@/components/room/models/Model";
 import { PALETTE } from "@/components/room/scene/layout";
 import { useSettings } from "@/components/room/scene/settings";
-import { canvasTexture, fontFamily } from "@/components/room/scene/textures";
+import { canvasTexture } from "@/components/room/scene/textures";
 import { frame } from "@/lib/frame";
+import { drawConsoleScreen, SCREEN_PX } from "./consoleScreen";
 import { useToy } from "./useToy";
 
 const TV = { width: 1.2, height: 0.675 };
 const HINT = new THREE.Color(PALETTE.cyan).multiplyScalar(1.5);
-
-function drawDashboard(ctx: CanvasRenderingContext2D, w: number, h: number) {
-  const sans = fontFamily("--font-sans");
-  const mono = fontFamily("--font-mono");
-  const background = ctx.createLinearGradient(0, 0, w, h);
-  background.addColorStop(0, "#071226");
-  background.addColorStop(1, "#0e2a4a");
-  ctx.fillStyle = background;
-  ctx.fillRect(0, 0, w, h);
-
-  ctx.fillStyle = "#6fe3ff";
-  ctx.font = `500 22px ${mono}`;
-  ctx.fillText("GAME MODE", 60, 64);
-  ctx.textAlign = "right";
-  ctx.fillStyle = "rgba(233,238,244,0.75)";
-  ctx.fillText(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), w - 60, 64);
-  ctx.textAlign = "left";
-
-  for (let i = 0; i < 6; i++) {
-    const big = i === 0;
-    const size = big ? 210 : 112;
-    const x = 60 + (big ? 0 : 300 + (i - 1) * 124);
-    const y = big ? 140 : 190;
-    const tile = ctx.createLinearGradient(x, y, x + size, y + size);
-    tile.addColorStop(0, `hsl(${200 + i * 22} 60% 32%)`);
-    tile.addColorStop(1, `hsl(${220 + i * 22} 70% 14%)`);
-    ctx.fillStyle = tile;
-    ctx.beginPath();
-    ctx.roundRect(x, y, size, size, 14);
-    ctx.fill();
-    if (big) {
-      ctx.strokeStyle = "rgba(111,227,255,0.9)";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-    }
-  }
-
-  ctx.fillStyle = "#e9eef4";
-  ctx.font = `800 36px ${sans}`;
-  ctx.fillText("Continue playing", 60, 430);
-  ctx.fillStyle = "rgba(233,238,244,0.5)";
-  ctx.font = `400 18px ${mono}`;
-  ctx.fillText("Press any button", 60, 468);
-}
 
 /** PS5 on the sideboard with the TV above it. Click or tap the console to switch both on and off. */
 export function Console({ tvPosition, ...props }: ThreeElements["group"] & { tvPosition: [number, number, number] }) {
@@ -70,12 +27,16 @@ export function Console({ tvPosition, ...props }: ThreeElements["group"] & { tvP
   const picture = useRef<THREE.MeshBasicMaterial>(null);
   const glow = useRef<THREE.PointLight>(null);
 
-  const dashboard = useMemo(() => canvasTexture(1024, 576, drawDashboard), []);
+  const dashboard = useMemo(() => canvasTexture(SCREEN_PX.width, SCREEN_PX.height, drawConsoleScreen), []);
   useEffect(() => {
-    document.fonts.ready.then(() => {
-      drawDashboard(dashboard.image.getContext("2d")!, 1024, 576);
+    const redraw = () => {
+      drawConsoleScreen(dashboard.image.getContext("2d")!, SCREEN_PX.width, SCREEN_PX.height);
       dashboard.needsUpdate = true;
-    });
+    };
+    document.fonts.ready.then(redraw);
+    // Keeps the clock in the corner current.
+    const timer = window.setInterval(redraw, 30_000);
+    return () => window.clearInterval(timer);
   }, [dashboard]);
 
   useFrame(({ clock }, delta) => {
@@ -140,7 +101,7 @@ export function Console({ tvPosition, ...props }: ThreeElements["group"] & { tvP
           <planeGeometry args={[TV.width, TV.height]} />
           <meshBasicMaterial ref={picture} map={dashboard} transparent opacity={0} toneMapped={false} />
         </mesh>
-        <pointLight ref={glow} position={[0, 0, 0.5]} color="#5d93e8" intensity={0} distance={3.5} decay={2} />
+        <pointLight ref={glow} position={[0, 0, 0.5]} color="#e0906a" intensity={0} distance={3.5} decay={2} />
       </group>
     </>
   );

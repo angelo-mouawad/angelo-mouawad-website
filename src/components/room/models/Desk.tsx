@@ -3,7 +3,6 @@
 import { RoundedBox } from "@react-three/drei";
 import { useMemo } from "react";
 import * as THREE from "three";
-import { Bible } from "@/components/room/interactions/Bible";
 import { Lamp } from "@/components/room/interactions/Lamp";
 import { Notebooks } from "@/components/room/interactions/Notebooks";
 import { Plant } from "@/components/room/interactions/Plant";
@@ -121,7 +120,6 @@ export function Desk() {
 
       {/* Clamped to the right edge: the elbow hangs over open floor and the head reaches in over the desk. */}
       <Lamp position={[DESK.width / 2 - 0.02, top, -0.06]} rotation-y={Math.PI / 2 + 0.15} />
-      <Bible position={[0.66, top, -0.2]} rotation-y={0.15} />
       <Notebooks position={[0.97, top, 0.2]} rotation-y={-0.25} />
     </group>
   );

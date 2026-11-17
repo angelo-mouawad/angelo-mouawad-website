@@ -1,6 +1,7 @@
 "use client";
 
 import * as THREE from "three";
+import { Bible } from "@/components/room/interactions/Bible";
 import { Console } from "@/components/room/interactions/Console";
 import { Fridge } from "@/components/room/interactions/Fridge";
 import { Plant } from "@/components/room/interactions/Plant";
@@ -39,7 +40,7 @@ function ShelfGlow({ position, width }: { position: [number, number, number]; wi
   );
 }
 
-/** Two shelves over the desk on the back wall. */
+/** Two shelves over the desk on the back wall. The Bible stands on the lower one, right of the plant. */
 export function WallShelves() {
   const z = ROOM.back + 0.11;
   return (
@@ -51,6 +52,7 @@ export function WallShelves() {
 
       <Model name="book_encyclopedia_set_01" position={[-0.42, 1.816, z]} />
       <Plant name="potted_plant_02" height={0.3} position={[0.26, 1.816, z]} rotation-y={0.8} phase={1} />
+      <Bible position={[0.58, 1.816, z + 0.01]} rotation-y={-0.12} />
 
       <Model name="camera_01" longest={0.16} position={[0.34, 2.216, z + 0.01]} rotation-y={0.5} />
       <Model name="book_encyclopedia_set_01" position={[0.86, 2.216, z]} scale={0.86} />
@@ -67,7 +69,6 @@ export function Sideboard() {
       <Model name="modern_wooden_cabinet" longest={1.9} position={[x, 0, -1.6]} rotation-y={Math.PI / 2} />
       <Console position={[x, top, -1.75]} rotation-y={Math.PI / 2 + 0.2} tvPosition={[ROOM.left + 0.03, 1.48, -1.6]} />
       <Plant name="potted_plant_01" height={0.52} position={[x, top, -0.95]} rotation-y={2} phase={3} />
-      <Model name="gaming_laptop" longest={0.34} position={[x + 0.02, top, -2.25]} rotation-y={-Math.PI / 2 - 0.3} />
       <Fridge position={[1.84, 0, ROOM.back + 0.28]} />
     </group>
   );

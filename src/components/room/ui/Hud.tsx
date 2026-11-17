@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, DoorOpen, MonitorSmartphone, NotebookPen } from "lucide-react";
+import { BookOpen, ChevronUp, DoorOpen, MonitorSmartphone, NotebookPen } from "lucide-react";
 import { motion, useMotionValueEvent } from "motion/react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { Dock, type DockItem } from "@/components/world/Dock";
@@ -105,9 +105,13 @@ export function Hud() {
       </header>
 
       <div className="absolute inset-x-0 bottom-0 flex h-svh flex-col items-center justify-end gap-4 pb-4 sm:pb-6">
-        <div ref={cue} aria-hidden="true" className="type-label flex flex-col items-center gap-2 text-[#6fe3ff] [text-shadow:0_0_12px_rgb(0_0_0/0.9)]">
-          <span className="pl-[0.2em]">Scroll</span>
-          <span className="h-7 w-px animate-pulse bg-gradient-to-b from-[#6fe3ff] to-transparent motion-reduce:animate-none" />
+        <div ref={cue} aria-hidden="true" className="glass flex items-center gap-2.5 rounded-full py-2 pr-4 pl-3 text-[0.8125rem] font-medium text-foreground/90">
+          <span className="relative flex h-[1.125rem] w-3 justify-center rounded-full border-[1.5px] border-[#6fe3ff]/80 pointer-coarse:hidden">
+            <span className="scroll-cue-wheel mt-[3px] h-1 w-[2px] rounded-full bg-[#6fe3ff]" />
+          </span>
+          <ChevronUp className="scroll-cue-swipe hidden size-4 text-[#6fe3ff] pointer-coarse:block" strokeWidth={2.25} />
+          <span className="pointer-coarse:hidden">Scroll to step inside</span>
+          <span className="hidden pointer-coarse:inline">Swipe up to step inside</span>
         </div>
         {visible && <Dock items={items} label="Places to go" />}
       </div>

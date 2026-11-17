@@ -7,7 +7,7 @@ import { canvasTexture, usePbr } from "./textures";
 
 const WALL_TILE = 2.4;
 const FLOOR_TILE = 1.5;
-const WALL_COLOR = "#77746f";
+const WALL_COLOR = "#a19e99";
 
 interface PanelProps {
   /** Bounds along the wall (u) and up (v), in metres. */

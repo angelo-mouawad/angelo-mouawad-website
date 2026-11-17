@@ -33,7 +33,6 @@ const POLYHAVEN_MODELS = {
 const OLD_MODELS = {
   gaming_chair: { tex: 1024 },
   gaming_mouse: { tex: 512 },
-  gaming_laptop: { tex: 512 },
   classic_ps5: { tex: 512 },
   cameraman_backpack: { tex: 1024 },
 };

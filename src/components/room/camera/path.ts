@@ -38,6 +38,6 @@ export function buildPath(aspect: number) {
 /** Where the camera settles when a link object is clicked, just before the route changes. */
 export const FOCUS: Record<LinkId, { position: THREE.Vector3; target: THREE.Vector3 }> = {
   notes: { position: new THREE.Vector3(1.12, 1.14, -1.78), target: new THREE.Vector3(0.97, 0.8, -2.3) },
-  bible: { position: new THREE.Vector3(0.78, 1.1, -2.05), target: new THREE.Vector3(0.66, 0.9, -2.72) },
+  bible: { position: new THREE.Vector3(0.68, 1.9, -2.16), target: new THREE.Vector3(0.58, 1.95, -2.88) },
   websites: { position: new THREE.Vector3(2.22, 1.56, -1.72), target: new THREE.Vector3(2.3, 1.56, -3) },
 };
