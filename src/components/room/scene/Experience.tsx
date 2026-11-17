@@ -5,7 +5,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { Selection } from "@react-three/postprocessing";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { CameraRig } from "@/components/room/camera/CameraRig";
-import { detectQuality, prefersReducedMotion } from "@/lib/device";
+import { detectQuality, effectFloor, prefersReducedMotion, qualitySteps } from "@/lib/device";
 import { invalidateShadows, trackPointer } from "@/lib/frame";
 import { useRoom } from "@/store/room";
 import { Effects } from "./Effects";
@@ -32,8 +32,13 @@ function SceneReady() {
 
 export default function Experience() {
   const settings = useMemo<Settings>(() => ({ quality: detectQuality(), reducedMotion: prefersReducedMotion() }), []);
-  const [dpr, setDpr] = useState(settings.quality.dpr);
+  // The start preset plus cheaper versions of it, given up one at a time while the frame rate stays low.
+  const steps = useMemo(() => qualitySteps(settings.quality), [settings]);
+  const floor = useMemo(() => effectFloor(steps), [steps]);
+  const [level, setLevel] = useState(0);
+  const live = steps[level];
   const inWorld = useRoom((state) => state.inWorld);
+  const sceneReady = useRoom((state) => state.sceneReady);
 
   useEffect(() => trackPointer(), []);
 
@@ -42,7 +47,7 @@ export default function Experience() {
       <Canvas
         shadows
         frameloop={inWorld ? "never" : "always"}
-        dpr={[1, dpr]}
+        dpr={[1, live.dpr]}
         camera={{ fov: 57, near: 0.05, far: 60, position: [2.25, 1.92, 3.8] }}
         gl={{ antialias: false, powerPreference: "high-performance" }}
         onCreated={({ gl }) => {
@@ -53,12 +58,19 @@ export default function Experience() {
       >
         <color attach="background" args={[PALETTE.background]} />
         <fog attach="fog" args={[PALETTE.background, 9, 24]} />
-        <PerformanceMonitor onDecline={() => setDpr((value) => Math.max(1, value - 0.25))} />
+        {/* Measured only once the scene is up, so loading and shader warm-up do not count against the device. */}
+        {sceneReady && (
+          <PerformanceMonitor
+            flipflops={6}
+            onDecline={() => setLevel((value) => Math.min(steps.length - 1, value + 1))}
+            onIncline={() => setLevel((value) => (value > floor ? value - 1 : value))}
+          />
+        )}
         <SettingsProvider value={settings}>
           <Suspense fallback={null}>
             <Selection>
               <Room />
-              <Effects />
+              <Effects quality={live} />
             </Selection>
             <SceneReady />
           </Suspense>

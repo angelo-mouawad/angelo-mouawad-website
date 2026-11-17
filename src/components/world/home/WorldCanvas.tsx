@@ -4,6 +4,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { PROJECTS } from "@/data/projects";
+import { detectQuality } from "@/lib/device";
 import { frame } from "@/lib/frame";
 import { scroll } from "@/lib/scroll";
 import { CYAN, DEEP, DUST, dustGeometry, HERO_REST, HeroShape, SKY, SOFT, spinHero, Wire, WORLD_CAMERA, worldTime } from "./heroScene";
@@ -160,12 +161,14 @@ function Scene({ reducedMotion }: { reducedMotion: boolean }) {
 
 /** The 3D layer behind the monitor scene. Transparent, so the page's own glow and grid show through. */
 export default function WorldCanvas({ active, reducedMotion, dpr }: { active: boolean; reducedMotion: boolean; dpr: number }) {
+  // Weaker GPUs draw this layer at a lower pixel ratio; it often runs alongside the room during the dive.
+  const maxDpr = useMemo(() => Math.min(dpr, detectQuality().worldDpr), [dpr]);
   return (
     <Canvas
       frameloop={active ? "always" : "demand"}
       // The layer is drawn in perspective on the monitor for a while; size the canvas by its layout box, not its transformed bounds.
       resize={{ offsetSize: true }}
-      dpr={[1, dpr]}
+      dpr={[1, maxDpr]}
       camera={{ fov: WORLD_CAMERA.fov, near: 0.1, far: 80, position: [0, 0, WORLD_CAMERA.z] }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       style={{ pointerEvents: "none" }}

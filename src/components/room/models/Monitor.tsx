@@ -6,12 +6,16 @@ import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { DESK, PALETTE, SCREEN } from "@/components/room/scene/layout";
 import { fillRect } from "@/components/room/scene/portal";
+import { useSettings } from "@/components/room/scene/settings";
 import { useShaderClock } from "@/components/room/scene/useShaderClock";
 import { DUST, dustGeometry, HERO_REST, HeroShape, SKY, spinHero, WORLD_CAMERA, worldTime } from "@/components/world/home/heroScene";
 import { frame } from "@/lib/frame";
+import { scroll } from "@/lib/scroll";
 
 const TARGET_WIDTH = 1024;
 const TARGET_HEIGHT = Math.round((TARGET_WIDTH * SCREEN.height) / SCREEN.width);
+/** Past this camera progress the screen is big enough in view that its picture is redrawn every frame. */
+const CLOSE_UP = 0.5;
 
 const vertexShader = /* glsl */ `
   varying vec2 vUv;
@@ -102,9 +106,11 @@ function ScreenScene({ still }: { still: boolean }) {
 const clearColor = new THREE.Color();
 
 export function Monitor({ animate }: { animate: boolean }) {
+  const { quality } = useSettings();
   const screen = useShaderClock(animate);
   const size = useThree((state) => state.size);
-  const target = useFBO(TARGET_WIDTH, TARGET_HEIGHT, { samples: 4, depthBuffer: true });
+  const target = useFBO(TARGET_WIDTH, TARGET_HEIGHT, { samples: quality.screenSamples, depthBuffer: true });
+  const frames = useRef(0);
   const [scene] = useState(() => new THREE.Scene());
   const view = useRef<THREE.PerspectiveCamera>(null);
   const pointer = useRef({ x: 0, y: 0 });
@@ -137,6 +143,12 @@ export function Monitor({ animate }: { animate: boolean }) {
     // Points are sized against the canvas height, so scale the motes to the target's share of the final viewport.
     const motes = scene.children.find((child): child is THREE.Points => (child as THREE.Points).isPoints);
     if (motes) (motes.material as THREE.PointsMaterial).size = (DUST.size * TARGET_HEIGHT * fill.height) / (SCREEN.height * gl.getPixelRatio() * size.height);
+
+    // Once the camera has arrived the live world layer covers the whole viewport, so nobody sees this picture.
+    if (frame.cameraProgress > 0.9995 && scroll.portal.get() >= 1) return;
+    // From afar the screen is a small, slow picture; weaker devices redraw it every other frame.
+    const due = frames.current++ % quality.screenEvery === 0;
+    if (!due && frame.cameraProgress < CLOSE_UP) return;
 
     const previous = gl.getRenderTarget();
     const alpha = gl.getClearAlpha();
