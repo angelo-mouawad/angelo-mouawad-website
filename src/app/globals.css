@@ -364,6 +364,37 @@ html.room-page::-webkit-scrollbar {
   display: none;
 }
 
+/*
+ * A thin scrollbar for panels that scroll on their own (notes sidebar, "On this page").
+ * No track and no arrows, just a faint rounded thumb that darkens while it is pointed at or dragged.
+ */
+/* Chrome, Edge and Safari. Chrome ignores these once scrollbar-width is set, so that stays Firefox only below. */
+.scroll-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-thin::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--line-strong);
+}
+
+.scroll-thin::-webkit-scrollbar-thumb:hover,
+.scroll-thin::-webkit-scrollbar-thumb:active {
+  background: color-mix(in srgb, var(--line-strong), var(--foreground) 20%);
+}
+
+/* Firefox, which has no WebKit pseudo elements. */
+@supports not selector(::-webkit-scrollbar) {
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+}
+
 /* ---------- The bright world: type, surfaces and effects ---------- */
 
 .world {

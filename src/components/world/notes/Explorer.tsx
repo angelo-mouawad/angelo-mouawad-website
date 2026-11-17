@@ -139,7 +139,7 @@ export function Explorer({ tree, onNavigate }: { tree: TreeNode[]; onNavigate?: 
         )}
       </div>
 
-      <div className="-mr-2 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-2">
+      <div className="scroll-thin -mr-2 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-2">
         {visible.length ? (
           <Branch nodes={visible} depth={0} open={open} toggle={toggle} active={active} forceOpen={Boolean(term)} onNavigate={onNavigate} />
         ) : (

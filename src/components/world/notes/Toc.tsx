@@ -63,7 +63,7 @@ export function Toc({ headings, variant }: { headings: Heading[]; variant: "side
   }
 
   return (
-    <nav aria-label="On this page" className="sticky top-24 hidden max-h-[calc(100dvh-8rem)] flex-col gap-4 overflow-y-auto 2xl:flex">
+    <nav aria-label="On this page" className="sticky top-24 hidden max-h-[calc(100dvh-8rem)] scroll-thin flex-col gap-4 overflow-y-auto overscroll-contain pr-2 2xl:flex">
       <p className="type-label text-muted-foreground">On this page</p>
       <Links headings={headings} active={active} />
     </nav>
