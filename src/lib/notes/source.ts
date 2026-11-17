@@ -125,3 +125,53 @@ export function resolveNoteLink(from: NoteMeta, target: string) {
   const match = getAllNotes().find((note) => path.resolve(note.file) === absolute);
   return match ? `${match.href}${hash ? `#${hash}` : ""}` : null;
 }
+
+let assetCache: string[] | null = null;
+
+/** Every non-markdown file in the notes, as paths relative to NOTES_DIR with forward slashes. */
+function assets(): string[] {
+  if (assetCache && process.env.NODE_ENV === "production") return assetCache;
+  const found: string[] = [];
+  const walkDir = (dir: string, relative: string[]) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name.startsWith(".")) continue;
+      if (entry.isDirectory()) walkDir(path.join(dir, entry.name), [...relative, entry.name]);
+      else if (!/\.mdx?$/i.test(entry.name)) found.push([...relative, entry.name].join("/"));
+    }
+  };
+  if (fs.existsSync(NOTES_DIR)) walkDir(NOTES_DIR, []);
+  assetCache = found;
+  return found;
+}
+
+const toUrl = (relative: string) => [ASSET_BASE, ...relative.split("/").map(encodeURIComponent)].join("/");
+
+/**
+ * Resolves an image path from a note to its URL under ASSET_BASE, the way Obsidian does:
+ * first relative to the note, then by file name anywhere in the vault, since Obsidian's
+ * default "shortest path" links write just `diagram.svg` for a file in `images/`.
+ * Prefers a match inside the note's own folder, then the closest one.
+ */
+export function resolveAsset(from: NoteMeta, src: string) {
+  let target = src.replace(/^\.\//, "");
+  try {
+    target = decodeURI(target);
+  } catch {
+    // A stray % that is not an escape, so the path is already plain text.
+  }
+  const relative = path.posix.normalize([...from.folders, target].join("/"));
+  const all = assets();
+  if (all.includes(relative)) return toUrl(relative);
+
+  const name = path.posix.basename(target).toLowerCase();
+  const candidates = all.filter((file) => file.toLowerCase().endsWith(`/${name}`) || file.toLowerCase() === name);
+  if (candidates.length === 0) return null;
+  const sharedDepth = (file: string) => {
+    const parts = file.split("/");
+    let depth = 0;
+    while (depth < from.folders.length && parts[depth] === from.folders[depth]) depth += 1;
+    return depth;
+  };
+  candidates.sort((a, b) => sharedDepth(b) - sharedDepth(a) || a.split("/").length - b.split("/").length);
+  return toUrl(candidates[0]);
+}

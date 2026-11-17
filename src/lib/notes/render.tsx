@@ -13,7 +13,7 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 import { CodeBlock } from "@/components/world/notes/CodeBlock";
-import { ASSET_BASE, type NoteMeta, resolveNoteLink } from "./source";
+import { ASSET_BASE, type NoteMeta, resolveAsset, resolveNoteLink } from "./source";
 
 export interface Heading {
   id: string;
@@ -63,9 +63,9 @@ function localPaths(note: NoteMeta) {
   return (tree: Root) =>
     walk(tree, (element) => {
       if (element.tagName === "img" && relative(element.properties.src)) {
+        const src = element.properties.src;
         // Folder names can contain spaces ("2 Python"), so every segment is URL encoded.
-        const file = decodeURI(element.properties.src.replace(/^\.\//, ""));
-        element.properties.src = [ASSET_BASE, ...note.folders.map(encodeURIComponent), encodeURI(file)].join("/");
+        element.properties.src = resolveAsset(note, src) ?? [ASSET_BASE, ...note.folders, src.replace(/^\.\//, "")].map(encodeURI).join("/");
       }
       if (element.tagName === "a" && relative(element.properties.href) && /\.mdx?(#|$)/.test(element.properties.href)) {
         element.properties.href = resolveNoteLink(note, element.properties.href) ?? element.properties.href;
