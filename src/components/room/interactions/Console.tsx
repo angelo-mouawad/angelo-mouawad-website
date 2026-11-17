@@ -14,6 +14,14 @@ import { useToy } from "./useToy";
 
 const TV = { width: 1.2, height: 0.675 };
 const HINT = new THREE.Color(PALETTE.cyan).multiplyScalar(1.5);
+// The DualSense file stands upright with its buttons on -z. Tipped back by a quarter turn it lies face up, and the
+// extra 0.17 rad is where it settles: resting on both grip tips and the trigger edge at once.
+const FACE_UP: [number, number, number] = [Math.PI / 2 + 0.17, 0, 0];
+// Along the sideboard beside the console. Local -x runs along the top, away from the console.
+const CONTROLLERS: { position: [number, number, number]; turn: number }[] = [
+  { position: [-0.27, 0, 0.03], turn: 0.18 },
+  { position: [-0.49, 0, -0.02], turn: Math.PI - 0.32 },
+];
 
 /** PS5 on the sideboard with the TV above it. Click or tap the console to switch both on and off. */
 export function Console({ tvPosition, ...props }: ThreeElements["group"] & { tvPosition: [number, number, number] }) {
@@ -66,7 +74,10 @@ export function Console({ tvPosition, ...props }: ThreeElements["group"] & { tvP
           <boxGeometry args={[0.012, 0.3, 0.006]} />
           <meshBasicMaterial ref={bar} color={PALETTE.cyan} toneMapped={false} />
         </mesh>
-        <Model name="gamepad" longest={0.16} position={[0.02, 0, 0.26]} rotation-y={0.5} />
+        {/* Playstation 5 Dualsense by AHarmlessPotato (CC BY 4.0). Outside the console's hover group, so only the console toggles. */}
+        {CONTROLLERS.map(({ position, turn }) => (
+          <Model key={position[0]} name="dualsense" longest={0.16} orient={FACE_UP} position={position} rotation-y={turn} />
+        ))}
 
         <Billboard position={[0, 0.5, 0]}>
           <mesh ref={hint} renderOrder={5}>

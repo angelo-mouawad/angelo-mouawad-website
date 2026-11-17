@@ -8,6 +8,7 @@ import { Plant } from "@/components/room/interactions/Plant";
 import { PALETTE, ROOM } from "@/components/room/scene/layout";
 import { usePbr } from "@/components/room/scene/textures";
 import { Model } from "./Model";
+import { GameStack, OrbLamp } from "./SideboardDecor";
 
 function FloatingShelf({ position, width }: { position: [number, number, number]; width: number }) {
   const wood = usePbr("walnut_veneer", width * 1.2, 0.3);
@@ -68,7 +69,9 @@ export function Sideboard() {
     <group>
       <Model name="modern_wooden_cabinet" longest={1.9} position={[x, 0, -1.6]} rotation-y={Math.PI / 2} />
       <Console position={[x, top, -1.75]} rotation-y={Math.PI / 2 + 0.2} tvPosition={[ROOM.left + 0.03, 1.48, -1.6]} />
-      <Plant name="potted_plant_01" height={0.52} position={[x, top, -0.95]} rotation-y={2} phase={3} />
+      {/* Either side of the console as seen from the room: games toward the front, a lamp toward the corner. */}
+      <GameStack position={[x + 0.01, top, -0.97]} rotation-y={-0.25} />
+      <OrbLamp position={[x, top, -2.22]} />
       <Fridge position={[1.84, 0, ROOM.back + 0.28]} />
     </group>
   );
@@ -95,7 +98,8 @@ export function Decor() {
   return (
     <group>
       <Plant name="potted_plant_01" height={0.98} position={[2.62, 0, -2.6]} rotation-y={-0.5} phase={5} />
-      <Model name="cameraman_backpack" height={0.5} position={[-1.48, 0, -2.72]} rotation={[-0.16, 0.3, 0]} />
+      {/* Under the window, left of the desk, where the chair does not hide it from the opening view. */}
+      <Model name="cameraman_backpack" height={0.5} position={[-2.15, 0, -2.8]} orient={[-0.16, 0.3, 0]} />
     </group>
   );
 }

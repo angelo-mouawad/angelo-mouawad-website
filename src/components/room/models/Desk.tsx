@@ -10,13 +10,19 @@ import { DESK, PALETTE } from "@/components/room/scene/layout";
 import { useSettings } from "@/components/room/scene/settings";
 import { Steam } from "@/components/room/scene/Steam";
 import { usePbr } from "@/components/room/scene/textures";
-import { Keyboard } from "./Keyboard";
-import { Model } from "./Model";
+import { Laptop } from "./Laptop";
 import { Monitor } from "./Monitor";
 import { Pc } from "./Pc";
+import { Peripherals } from "./Peripherals";
 
 const TOP_THICKNESS = 0.04;
 const METAL = { color: "#0e1014", roughness: 0.45, metalness: 0.7 };
+
+// Where the chair settles when it turns to the desk, in the desk's own coordinates.
+const SEAT = { x: -0.46, z: -1.52 - DESK.z };
+const LAPTOP = { x: 0.8, z: -0.2 };
+// The laptop's screen faces +z in the file; this turns it toward the seat.
+const LAPTOP_TURN = Math.atan2(SEAT.x - LAPTOP.x, SEAT.z - LAPTOP.z);
 
 function Legs() {
   const height = DESK.top - TOP_THICKNESS;
@@ -108,19 +114,21 @@ export function Desk() {
       <RoundedBox args={[0.82, 0.004, 0.34]} radius={0.002} position={[0.06, top + 0.002, 0.2]} receiveShadow>
         <meshStandardMaterial color="#14161b" roughness={0.95} />
       </RoundedBox>
-      <Keyboard position={[-0.07, top + 0.004, 0.2]} />
-      {/* The file is in centimetres and includes a long cable, so it is scaled by hand rather than fitted. */}
-      <Model name="gaming_mouse" anchor="origin" scale={0.0105} position={[0.31, top + 0.004, 0.21]} rotation-y={Math.PI + 0.12} />
+      <Peripherals position={[-0.07, top + 0.004, 0.2]} mouse={{ position: [0.38, 0, 0.01], rotation: -0.12 }} />
 
       <Mug position={[0.47, top, -0.08]} />
       <Steam position={[0.47, top + 0.09, -0.08]} animate={!reducedMotion} />
 
-      <Pc position={[-0.94, top, -0.14]} rotation-y={Math.PI / 2 + 0.2} />
-      <Plant name="potted_plant_04" height={0.2} position={[-0.6, top, -0.28]} rotation-y={1.1} phase={2} />
+      {/* Front toward the room, glass on the right facing the desk, angled a little toward the room. */}
+      <Pc position={[-0.93, top, -0.14]} rotation-y={-0.3} />
+      {/* Centred in the gap between the PC's right side and the monitor's left edge. */}
+      <Plant name="potted_plant_04" height={0.2} position={[-0.55, top, -0.28]} rotation-y={1.1} phase={2} />
 
       {/* Clamped to the right edge: the elbow hangs over open floor and the head reaches in over the desk. */}
       <Lamp position={[DESK.width / 2 - 0.02, top, -0.06]} rotation-y={Math.PI / 2 + 0.15} />
       <Notebooks position={[0.97, top, 0.2]} rotation-y={-0.25} />
+      {/* Behind the notebooks and right of the mug, screen turned toward the chair. */}
+      <Laptop turn={LAPTOP_TURN} position={[LAPTOP.x, top, LAPTOP.z]} />
     </group>
   );
 }

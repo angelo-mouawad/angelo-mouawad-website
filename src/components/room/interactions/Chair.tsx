@@ -29,7 +29,8 @@ export function Chair() {
   return (
     <group ref={chair} position={[START.x, 0, START.z]} rotation-y={START.turn}>
       <BlobShadow size={1.25} opacity={0.6} />
-      <Model name="gaming_chair" height={1.3} />
+      {/* Modern Chair by Cre8t!ve V!be (CC BY 4.0). The file faces +x with its origin on the swivel, so it is turned to face +z like the old chair and spins on its own column. */}
+      <Model name="modern_chair" height={1.3} anchor="origin" orient={[0, -Math.PI / 2, 0]} />
     </group>
   );
 }

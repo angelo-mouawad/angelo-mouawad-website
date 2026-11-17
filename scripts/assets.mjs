@@ -8,11 +8,16 @@ import sharp from "sharp";
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CACHE = path.join(ROOT, ".asset-cache");
 const OLD_SITE = path.resolve(ROOT, "..", "Personal Resume website", "objects");
+// Uncompressed models added by hand (Sketchfab exports). Their compressed copies in public/models are the ones kept;
+// to rebuild one, put its source file here again and run the script with --only <name>.
+const LOCAL_SOURCE = path.join(ROOT, "assets", "models");
 const OUT_MODELS = path.join(ROOT, "public", "models");
 const OUT_TEXTURES = path.join(ROOT, "public", "textures");
 const OUT_HDRI = path.join(ROOT, "public", "hdri");
 
 // tex: longest texture edge after compression. keep: preserve the node tree for animated parts.
+// palette: false keeps materials separate so code can restyle them by name.
+// simplify: mesh simplification error, as a fraction of the mesh extent (gltf-transform default 0.0001).
 const POLYHAVEN_MODELS = {
   binder_notebook: { tex: 512, keep: true },
   office_notepads: { tex: 512, keep: true },
@@ -25,16 +30,26 @@ const POLYHAVEN_MODELS = {
   wall_clock: { tex: 512, keep: true },
   
   Camera_01: { tex: 256 },
-  gamepad: { tex: 512 },
   
   football: { tex: 512, keep: true },
 };
 
 const OLD_MODELS = {
-  gaming_chair: { tex: 1024 },
-  gaming_mouse: { tex: 512 },
   classic_ps5: { tex: 512 },
   cameraman_backpack: { tex: 1024 },
+};
+
+// Source file name → output name and options.
+const LOCAL_MODELS = {
+  lain_li_pc_case: { out: "lian_li_case", tex: 2048, palette: false },
+  modern_chair_3d_model: { out: "modern_chair", tex: 512, palette: false, simplify: 0.0008 },
+  mouse_and_keyboard: { out: "mouse_and_keyboard", tex: 1024, palette: false, simplify: 0.0005 },
+  playstation_5_dualsense: { out: "dualsense", tex: 512, palette: false, simplify: 0.0005 },
+};
+
+// Poly Pizza model id → output name and options. Files come from static.poly.pizza.
+const POLYPIZZA_MODELS = {
+  "7528df1c-c611-4e42-9210-eba9fcaf4269": { out: "laptop", palette: false, join: false },
 };
 
 const POLYHAVEN_TEXTURES = {
@@ -66,15 +81,18 @@ async function filesOf(id) {
   return res.json();
 }
 
-function optimize(src, name, { tex, keep }) {
+function optimize(src, name, { tex, keep, simplify, palette = true, join = true }) {
   const out = path.join(OUT_MODELS, `${name}.glb`);
   const args = [
     path.join(ROOT, "node_modules", "@gltf-transform", "cli", "bin", "cli.js"),
     "optimize", src, out,
     "--compress", "meshopt",
     "--texture-compress", "webp",
-    "--texture-size", String(tex),
+    ...(tex ? ["--texture-size", String(tex)] : []),
   ];
+  if (simplify) args.push("--simplify-error", String(simplify));
+  if (!palette && !keep) args.push("--palette", "false");
+  if (!join && !keep) args.push("--join", "false");
   if (keep) args.push("--flatten", "false", "--join", "false", "--instance", "false", "--palette", "false");
   execFileSync(process.execPath, args, { stdio: ["ignore", "ignore", "inherit"] });
   const kb = (fs.statSync(out).size / 1024).toFixed(0);
@@ -124,6 +142,22 @@ for (const [id, opts] of Object.entries(POLYHAVEN_MODELS)) {
 console.log("Models reused from the old site");
 for (const [name, opts] of Object.entries(OLD_MODELS)) {
   if (wanted(name)) optimize(path.join(OLD_SITE, `${name}.glb`), name, opts);
+}
+
+console.log("Local models");
+for (const [source, { out, ...opts }] of Object.entries(LOCAL_MODELS)) {
+  if (!wanted(source) && !wanted(out)) continue;
+  const file = path.join(LOCAL_SOURCE, `${source}.glb`);
+  if (fs.existsSync(file)) optimize(file, out, opts);
+  else console.log(`  ${out}.glb kept as is (no source at assets/models/${source}.glb)`);
+}
+
+console.log("Poly Pizza models");
+for (const [id, { out, ...opts }] of Object.entries(POLYPIZZA_MODELS)) {
+  if (!wanted(out)) continue;
+  const src = path.join(CACHE, "models", "polypizza", `${out}.glb`);
+  await download(`https://static.poly.pizza/${id}.glb`, src);
+  optimize(src, out, opts);
 }
 
 console.log("Textures");

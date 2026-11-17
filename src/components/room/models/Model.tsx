@@ -12,12 +12,13 @@ export const MODELS = [
   "cameraman_backpack",
   "classic_ps5",
   "desk_lamp_arm_01",
+  "dualsense",
   "football",
-  "gamepad",
-  "gaming_chair",
-  "gaming_mouse",
-  "gaming_pc",
+  "laptop",
+  "lian_li_case",
+  "modern_chair",
   "modern_wooden_cabinet",
+  "mouse_and_keyboard",
   "office_notepads",
   "potted_plant_01",
   "potted_plant_02",
@@ -38,6 +39,8 @@ export interface FitOptions {
   longest?: number;
   /** Which point of the model lands on the group's position. "origin" keeps the file's own origin. */
   anchor?: Anchor;
+  /** Rotation (x, y, z) applied to the model before it is fitted, so "bottom" is the lowest point of the turned model. */
+  orient?: [number, number, number];
 }
 
 const box = new THREE.Box3();
@@ -46,7 +49,8 @@ const center = new THREE.Vector3();
 
 /** Scale and offset that seat an object on the origin according to its anchor. */
 export function fit(object: THREE.Object3D, { height, longest, anchor = "bottom" }: FitOptions) {
-  box.setFromObject(object);
+  // Exact vertex bounds: the coarse box over-reaches on turned meshes and would leave models hovering above their surface.
+  box.setFromObject(object, true);
   box.getSize(size);
   box.getCenter(center);
   const scale = height ? height / size.y : longest ? longest / Math.max(size.x, size.y, size.z) : 1;
@@ -78,12 +82,15 @@ type ModelProps = Omit<ThreeElements["group"], "name"> &
     shadows?: boolean;
   };
 
-export function Model({ name, node, hide, height, longest, anchor, shadows = true, children, ...props }: ModelProps) {
+export function Model({ name, node, hide, height, longest, anchor, orient, shadows = true, children, ...props }: ModelProps) {
   const { scene } = useGLTF(modelUrl(name));
+  // A fresh array each render, so it is compared by value.
+  const turn = orient?.join();
 
   const { object, placement } = useMemo(() => {
     const source = (node && scene.getObjectByName(node)) || scene;
     const clone = source.clone(true);
+    if (turn) clone.rotation.set(...(turn.split(",").map(Number) as [number, number, number]));
     enableShadows(clone, shadows);
     if (hide) {
       clone.traverse((child) => {
@@ -92,7 +99,7 @@ export function Model({ name, node, hide, height, longest, anchor, shadows = tru
       });
     }
     return { object: clone, placement: fit(clone, { height, longest, anchor }) };
-  }, [scene, node, hide, height, longest, anchor, shadows]);
+  }, [scene, node, hide, height, longest, anchor, shadows, turn]);
 
   return (
     <group {...props}>
