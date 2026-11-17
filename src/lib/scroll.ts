@@ -8,6 +8,8 @@ import { motionValue } from "motion/react";
 export const scroll = {
   /** 0 to 1 while the room's screen turns into light and the world rises into view. */
   dive: motionValue(0),
+  /** 0 to 1 as the live world layer fades in over the monitor near the end of the room. */
+  portal: motionValue(0),
   /** 0 to 1 across each pinned section of the world. */
   hero: motionValue(0),
   about: motionValue(0),

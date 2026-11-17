@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { SCREEN } from "@/components/room/scene/layout";
+import { FILL } from "@/components/room/scene/portal";
 import type { LinkId } from "@/lib/links";
 
 export const END_FOV = 40;
@@ -12,7 +13,7 @@ export function startFov(aspect: number) {
 /** How far back the camera can sit while the screen still covers the whole viewport. */
 function fillDistance(aspect: number) {
   const visible = Math.min(SCREEN.height, SCREEN.width / aspect);
-  return (visible / (2 * Math.tan(THREE.MathUtils.degToRad(END_FOV) / 2))) * 0.97;
+  return (visible / (2 * Math.tan(THREE.MathUtils.degToRad(END_FOV) / 2))) * FILL;
 }
 
 export function buildPath(aspect: number) {

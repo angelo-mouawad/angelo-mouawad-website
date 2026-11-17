@@ -2,6 +2,7 @@
 
 import Lenis from "lenis";
 import { useEffect, useRef } from "react";
+import { portal } from "@/components/room/scene/portal";
 import { prefersReducedMotion } from "@/lib/device";
 import { frame } from "@/lib/frame";
 import { registerLenis, scroll } from "@/lib/scroll";
@@ -33,9 +34,12 @@ export function SmoothScroll() {
       // The world starts right under the room's scroll track, so it rises into view over one viewport.
       frame.dive = clamp((window.scrollY - limit) / viewport);
       scroll.dive.set(frame.dive);
-      // The room is not drawn past this point, so its camera is parked at the end of its path.
-      if (frame.dive > 0) frame.cameraProgress = 1;
+      // The camera keeps easing in on its own as the dive starts; it is only parked once the room stops drawing.
       const inWorld = frame.dive >= 0.999;
+      if (inWorld) {
+        frame.cameraProgress = 1;
+        if (portal.element) portal.element.style.transform = "none";
+      }
       if (inWorld !== useRoom.getState().inWorld) useRoom.getState().setInWorld(inWorld);
     };
     window.addEventListener("scroll", update, { passive: true });

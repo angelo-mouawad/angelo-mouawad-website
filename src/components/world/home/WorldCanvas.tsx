@@ -6,11 +6,8 @@ import * as THREE from "three";
 import { PROJECTS } from "@/data/projects";
 import { frame } from "@/lib/frame";
 import { scroll } from "@/lib/scroll";
+import { CYAN, DEEP, DUST, dustGeometry, HERO_REST, HeroShape, SKY, SOFT, spinHero, Wire, WORLD_CAMERA, worldTime } from "./heroScene";
 
-const SKY = "#2f9bff";
-const CYAN = "#12b5e5";
-const DEEP = "#0b6bdc";
-const SOFT = "#8fb8ff";
 
 const lerp = THREE.MathUtils.lerp;
 const smooth = THREE.MathUtils.smoothstep;
@@ -28,27 +25,6 @@ function networkGeometry(count: number, reach: number) {
   const lines = new THREE.BufferGeometry();
   lines.setAttribute("position", new THREE.Float32BufferAttribute(links, 3));
   return { points, lines };
-}
-
-function dustGeometry(count: number) {
-  const positions = new Float32Array(count * 3);
-  for (let i = 0; i < count; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 30;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 18;
-    positions[i * 3 + 2] = -8 + Math.random() * 12;
-  }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-  return geometry;
-}
-
-function Wire({ radius, detail, color, opacity }: { radius: number; detail: number; color: string; opacity: number }) {
-  return (
-    <mesh>
-      <icosahedronGeometry args={[radius, detail]} />
-      <meshBasicMaterial color={color} wireframe transparent opacity={opacity} toneMapped={false} />
-    </mesh>
-  );
 }
 
 /** One project capsule: a wire core between two rings, the old pods redrawn in line. */
@@ -80,12 +56,12 @@ function Scene({ reducedMotion }: { reducedMotion: boolean }) {
   const pointer = useRef({ x: 0, y: 0 });
 
   const net = useMemo(() => networkGeometry(54, 4.2), []);
-  const motes = useMemo(() => dustGeometry(260), []);
+  const motes = useMemo(() => dustGeometry(DUST.count), []);
   const podColors = [SKY, CYAN, SOFT];
   const podGap = 4.6;
 
-  useFrame(({ clock, camera }, delta) => {
-    const t = reducedMotion ? 0 : clock.elapsedTime;
+  useFrame(({ camera }, delta) => {
+    const t = worldTime(reducedMotion);
     const dive = scroll.dive.get();
     const h = scroll.hero.get();
     const a = scroll.about.get();
@@ -103,14 +79,14 @@ function Scene({ reducedMotion }: { reducedMotion: boolean }) {
     if (hero.current) {
       const park = smooth(h, 0.7, 1);
       const leave = smooth(p, 0, 0.1);
-      hero.current.position.set(lerp(lerp(0, 4.6, smooth(h, 0.15, 0.7)), 9.4, park) + leave * 8, lerp(0.2, 4.3, park) + leave * 3, lerp(lerp(-14, -1, smooth(dive, 0.2, 1)), -4, park));
-      hero.current.rotation.set(t * 0.07 + h * 1.4, t * 0.11 + (h + a) * 2.2, 0);
+      hero.current.position.set(
+        lerp(lerp(HERO_REST.x, 4.6, smooth(h, 0.15, 0.7)), 9.4, park) + leave * 8,
+        lerp(HERO_REST.y, 4.3, park) + leave * 3,
+        lerp(lerp(HERO_REST.z, -1, smooth(dive, 0.2, 1)), -4, park),
+      );
+      spinHero(hero.current, rings.current, t, h * 1.4, (h + a) * 2.2, h * 1.2);
       hero.current.scale.setScalar(lerp(1, 0.42, park));
       hero.current.visible = leave < 0.999 || c > 0;
-    }
-    if (rings.current) {
-      rings.current.rotation.z = t * 0.05 + h * 1.2;
-      rings.current.rotation.x = 1.1 + Math.sin(t * 0.2) * 0.08;
     }
 
     // The node field rises through the about section and sinks away as the projects take over.
@@ -149,17 +125,8 @@ function Scene({ reducedMotion }: { reducedMotion: boolean }) {
 
   return (
     <>
-      <group ref={hero} position-z={-14}>
-        <Wire radius={2.6} detail={1} color={SKY} opacity={0.55} />
-        <Wire radius={1.5} detail={0} color={DEEP} opacity={0.35} />
-        <group ref={rings}>
-          {[3.4, 3.9, 4.6].map((radius, index) => (
-            <mesh key={radius} rotation-x={index * 0.5}>
-              <torusGeometry args={[radius, 0.008, 6, 120]} />
-              <meshBasicMaterial color={index === 1 ? CYAN : SOFT} transparent opacity={0.55} toneMapped={false} />
-            </mesh>
-          ))}
-        </group>
+      <group ref={hero} position={HERO_REST}>
+        <HeroShape ringsRef={rings} />
       </group>
 
       <group ref={network} visible={false}>
@@ -185,7 +152,7 @@ function Scene({ reducedMotion }: { reducedMotion: boolean }) {
       </group>
 
       <points ref={dust} geometry={motes}>
-        <pointsMaterial color={SKY} size={0.045} sizeAttenuation transparent opacity={0.55} toneMapped={false} />
+        <pointsMaterial color={SKY} size={DUST.size} sizeAttenuation transparent opacity={0.55} toneMapped={false} />
       </points>
     </>
   );
@@ -195,9 +162,11 @@ function Scene({ reducedMotion }: { reducedMotion: boolean }) {
 export default function WorldCanvas({ active, reducedMotion, dpr }: { active: boolean; reducedMotion: boolean; dpr: number }) {
   return (
     <Canvas
-      frameloop={active ? "always" : "never"}
+      frameloop={active ? "always" : "demand"}
+      // The layer is drawn in perspective on the monitor for a while; size the canvas by its layout box, not its transformed bounds.
+      resize={{ offsetSize: true }}
       dpr={[1, dpr]}
-      camera={{ fov: 50, near: 0.1, far: 80, position: [0, 0, 10] }}
+      camera={{ fov: WORLD_CAMERA.fov, near: 0.1, far: 80, position: [0, 0, WORLD_CAMERA.z] }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       style={{ pointerEvents: "none" }}
     >
