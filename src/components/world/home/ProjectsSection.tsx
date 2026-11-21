@@ -38,9 +38,10 @@ function ProjectCard({ project, index, x, layout, still }: { project: Project; i
     <motion.li className="flex w-[min(86vw,30rem)] shrink-0 will-change-transform lg:w-[min(82vw,60rem)]" style={still ? undefined : { rotateY, scale, y, opacity, transformPerspective: 1400 }}>
       {/* No fixed height: the card grows with its text, and the row stretches every card to the tallest one. */}
       <Panel
-        surface={soon ? "sunk" : "glass"}
+        // Solid card colour (white in the light theme) so the outlined "Projects" word behind never shows through.
+        surface="solid"
         ticks={!soon}
-        className={cn("relative flex w-full flex-col overflow-hidden lg:grid lg:grid-cols-[1.08fr_1fr]", soon && "border-dashed bg-sunk/60")}
+        className={cn("relative flex w-full flex-col overflow-hidden lg:grid lg:grid-cols-[1.08fr_1fr]", soon && "border-dashed! border-line-strong!")}
       >
         <ProjectMedia project={project} />
 
