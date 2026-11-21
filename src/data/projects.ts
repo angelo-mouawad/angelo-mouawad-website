@@ -9,6 +9,10 @@ export interface Project {
   description: string;
   tech: string[];
   links: { label: string; href: string }[];
+  /** Screenshot in public/, captured at 1440x900. Leave out and the card shows a placeholder. */
+  image?: string;
+  /** Where the card anchors the screenshot when it crops it (CSS object-position). Defaults to the top left. */
+  imagePosition?: string;
   /** Leave out for a finished project. "soon" renders a reserved slot. */
   status?: "soon";
 }
@@ -16,6 +20,7 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     id: "flow-engine",
+    image: "/projects/flow-engine.webp",
     title: "Flow Engine",
     category: "Backend architecture",
     description:
@@ -25,6 +30,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "gaffer",
+    image: "/projects/gaffer.webp",
     title: "Gaffer",
     category: "Machine learning, AI",
     description:
@@ -34,6 +40,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "restaurant-management",
+    image: "/projects/restaurant-management.webp",
     title: "Restaurant Management System",
     category: "Full stack, team project",
     description:
@@ -43,6 +50,8 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "finger-dragon",
+    image: "/projects/finger-dragon.webp",
+    imagePosition: "center",
     title: "Finger Dragon",
     category: "Computer vision, games",
     description:
@@ -52,6 +61,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "samar-holidays",
+    image: "/sites/samar-holidays-desktop.webp",
     title: "Samar Holidays",
     category: "Client work, live",
     description:
@@ -64,6 +74,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "echoes-events",
+    image: "/sites/echoes-events-desktop.webp",
     title: "Echoes Events",
     category: "Client work, live",
     description:
