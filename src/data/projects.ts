@@ -44,8 +44,8 @@ export const PROJECTS: Project[] = [
     title: "Restaurant Management System",
     category: "Full stack, team project",
     description:
-      "A full-stack app for running the day-to-day side of a restaurant: stock tracking, shift scheduling, and notifications pushed to the people affected. Built with a Scrum team at UCLL: a Spring Boot REST API on one side, Next.js on the other, and JWT auth in an httpOnly cookie between them.",
-    tech: ["Java 21", "Spring Boot", "Next.js 15", "React 19", "PostgreSQL", "TypeScript"],
+      "Shift planning and stock for a restaurant, with admin, manager and employee roles enforced by the API. Employees enter their availability; managers plan on a grid that flags clashes and short staffing, then publish the week. Every stock change is a logged movement, and orders book straight into stock. Started as a Scrum team project at UCLL.",
+    tech: ["Java 21", "Spring Boot", "PostgreSQL", "Flyway", "Next.js 15", "TypeScript"],
     links: [{ label: "GitHub", href: "https://github.com/angelo-mouawad/restaurant-management-system-project" }],
   },
   {
