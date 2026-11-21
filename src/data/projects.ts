@@ -60,6 +60,16 @@ export const PROJECTS: Project[] = [
     links: [{ label: "GitHub", href: "https://github.com/angelo-mouawad/finger-dragon-game" }],
   },
   {
+    id: "battlecars",
+    image: "/projects/battlecars.webp",
+    title: "BattleCars",
+    category: "IoT, team project",
+    description:
+      "Two robot cars fight in an arena while players drive them from a browser. As the team's IoT engineer I built the cars and the ESP32 hub and wrote all the firmware, from the 433 MHz radio protocol to accelerometer hit detection. A car stops itself the moment commands stop arriving, and every hit takes health off live, with AI commentary read aloud.",
+    tech: ["C++", "ESP32", "Arduino", "PlatformIO", "Spring Boot", "Next.js"],
+    links: [{ label: "GitHub", href: "https://github.com/angelo-mouawad/battlecars" }],
+  },
+  {
     id: "samar-holidays",
     image: "/sites/samar-holidays-desktop.webp",
     title: "Samar Holidays",
@@ -87,15 +97,6 @@ export const PROJECTS: Project[] = [
   },
 
   // Reserved slots. Replace the text, add tech and links, and delete the status line.
-  {
-    id: "coming-soon-1",
-    title: "Next project",
-    category: "Coming soon",
-    description: "This slot is reserved for something I'm working on.",
-    tech: [],
-    links: [],
-    status: "soon",
-  },
   {
     id: "coming-soon-2",
     title: "Next project",
