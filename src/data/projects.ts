@@ -55,7 +55,7 @@ export const PROJECTS: Project[] = [
     title: "Finger Dragon",
     category: "Computer vision, games",
     description:
-      "A webcam-controlled arcade game. Your index finger flies the dragon and pinching it to your thumb breathes fire, while enemy dragons chase you and shoot back. Hand tracking runs on its own thread so the game never stalls waiting on a camera frame, and it degrades gracefully when there's no webcam at all.",
+      "A webcam-controlled arcade game. Your index finger flies the dragon and pinching it to your thumb breathes fire, while enemy dragons chase you and shoot back. Pinches are measured against your own palm, so they work at any distance from the camera. Lose your hand and the game waits for you, and with no webcam at all the mouse flies the dragon instead.",
     tech: ["Python", "Pygame", "MediaPipe", "OpenCV"],
     links: [{ label: "GitHub", href: "https://github.com/angelo-mouawad/finger-dragon-game" }],
   },
