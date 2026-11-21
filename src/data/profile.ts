@@ -30,10 +30,16 @@ export const PROFILE = {
       { label: "School", value: "UCLL, Leuven" },
       { label: "Track", value: "Artificial Intelligence" },
       { label: "Also", value: "Freelance web designer" },
-      { label: "Year", value: "Which year are you in?", todo: true },
-      { label: "Based in", value: "Where do you live?", todo: true },
-      { label: "Languages", value: "Which languages do you speak?", todo: true },
+      { label: "Year", value: "Third year" },
+      { label: "Based in", value: "Leuven, Belgium" },
+      { label: "Languages", value: "English, French" },
     ] satisfies Fact[],
+  },
+
+  /** Shown as the last card in the facts grid. Replace the file in public/cv to update it. */
+  cv: {
+    href: "/cv/angelo-mouawad-cv.pdf",
+    fileName: "Angelo Mouawad CV.pdf",
   },
 
   contact: {

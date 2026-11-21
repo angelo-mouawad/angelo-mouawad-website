@@ -1,8 +1,10 @@
 "use client";
 
+import { Download } from "lucide-react";
 import { motion, type MotionValue, useTransform } from "motion/react";
 import Image from "next/image";
-import { useRef } from "react";
+import { type ReactNode, useRef } from "react";
+import { buttonVariants } from "@/components/ui/button";
 import { Chip, Container, MonoLabel, Panel } from "@/components/world/primitives";
 import ContributionSkyline from "@/components/vendor/ContributionSkyline";
 import ScrollVelocity from "@/components/vendor/ScrollVelocity";
@@ -10,6 +12,7 @@ import contributions from "@/data/contributions.json";
 import { PROFILE, type Fact } from "@/data/profile";
 import { techStack } from "@/data/projects";
 import { scroll } from "@/lib/scroll";
+import { cn } from "@/lib/utils";
 import { scatter, useElementProgress, useSectionProgress } from "./useSectionProgress";
 
 const SKYLINE_PALETTE = ["#bfe3ff", "#6fc1ff", "#2f9bff", "#0b6bdc"];
@@ -25,8 +28,10 @@ function Word({ word, range, progress }: { word: string; range: [number, number]
   );
 }
 
-/** A fact card that arrives from its own direction and settles into the row. */
-function FactCard({ fact, index, total, progress, still }: { fact: Fact; index: number; total: number; progress: MotionValue<number>; still: boolean }) {
+type FlyInProps = { index: number; total: number; progress: MotionValue<number>; still: boolean; children: ReactNode };
+
+/** A grid cell that arrives from its own direction and settles into the row. */
+function FlyIn({ index, total, progress, still, children }: FlyInProps) {
   const start = 0.42 + (index / total) * 0.24;
   const window: [number, number] = [start, start + 0.2];
   const fromSide = index % 3 !== 1;
@@ -37,14 +42,34 @@ function FactCard({ fact, index, total, progress, still }: { fact: Fact; index: 
 
   return (
     <motion.li className="will-change-transform" style={still ? undefined : { x, y, rotate, opacity }}>
-      <Panel surface={fact.todo ? "sunk" : "glass"} className={`flex h-full flex-col gap-1.5 rounded-2xl px-3.5 py-2.5 sm:gap-2 sm:px-5 sm:py-4 ${fact.todo ? "border-dashed" : ""}`}>
+      {children}
+    </motion.li>
+  );
+}
+
+/** The last card in the grid: the CV as a PDF download. */
+function CvCard() {
+  return (
+    <Panel surface="glass" className="flex h-full flex-col gap-1.5 rounded-2xl px-3.5 py-2.5 sm:gap-2 sm:px-5 sm:py-4">
+      <MonoLabel>Résumé</MonoLabel>
+      <a href={PROFILE.cv.href} download={PROFILE.cv.fileName} className={cn(buttonVariants({ variant: "glow", size: "sm" }), "group/cv mt-auto self-start max-sm:h-8 max-sm:px-3 max-sm:text-xs")}>
+        <Download aria-hidden="true" className="group-hover/cv:translate-y-0.5" />
+        Download CV
+        <span className="sr-only">(PDF)</span>
+      </a>
+    </Panel>
+  );
+}
+
+function FactCard({ fact }: { fact: Fact }) {
+  return (
+    <Panel surface={fact.todo ? "sunk" : "glass"} className={`flex h-full flex-col gap-1.5 rounded-2xl px-3.5 py-2.5 sm:gap-2 sm:px-5 sm:py-4 ${fact.todo ? "border-dashed" : ""}`}>
         <MonoLabel>
           {fact.label}
           {fact.todo && <Chip tone="muted" className="h-5 px-2 text-[0.5625rem]">TODO</Chip>}
         </MonoLabel>
         <span className={`font-display text-sm leading-snug font-medium tracking-tight sm:text-lg ${fact.todo ? "text-muted-foreground" : ""}`}>{fact.value}</span>
-      </Panel>
-    </motion.li>
+    </Panel>
   );
 }
 
@@ -134,8 +159,13 @@ export function AboutSection({ still }: { still: boolean }) {
             </h2>
             <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
               {facts.map((fact, index) => (
-                <FactCard key={fact.label} fact={fact} index={index} total={facts.length} progress={progress} still={still} />
+                <FlyIn key={fact.label} index={index} total={facts.length + 1} progress={progress} still={still}>
+                  <FactCard fact={fact} />
+                </FlyIn>
               ))}
+              <FlyIn index={facts.length} total={facts.length + 1} progress={progress} still={still}>
+                <CvCard />
+              </FlyIn>
             </ul>
           </Container>
         </motion.div>
