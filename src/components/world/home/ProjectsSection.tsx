@@ -1,10 +1,9 @@
 "use client";
 
-import { Hammer } from "lucide-react";
-import { motion, type MotionValue, useMotionValueEvent, useTransform } from "motion/react";
-import Image from "next/image";
-import { type RefObject, useEffect, useRef, useState } from "react";
+import { motion, type MotionValue, useMotionValue, useMotionValueEvent, useTransform } from "motion/react";
+import { type RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { Chip, MonoLabel, Panel, TextLink } from "@/components/world/primitives";
+import { MacbookFrame } from "@/components/world/websites/DeviceFrames";
 import { PROJECTS, type Project } from "@/data/projects";
 import { scroll } from "@/lib/scroll";
 import { cn } from "@/lib/utils";
@@ -35,24 +34,27 @@ function ProjectCard({ project, index, x, layout, still }: { project: Project; i
   const numeralX = useTransform(offset, [-1, 1], ["-40%", "40%"]);
 
   return (
-    <motion.li className="flex w-[min(86vw,30rem)] shrink-0 will-change-transform lg:w-[min(82vw,60rem)]" style={still ? undefined : { rotateY, scale, y, opacity, transformPerspective: 1400 }}>
-      {/* No fixed height: the card grows with its text, and the row stretches every card to the tallest one. */}
+    <motion.li className="flex shrink-0 items-center gap-8 will-change-transform xl:gap-12" style={still ? undefined : { rotateY, scale, y, opacity, transformPerspective: 1400 }}>
+      {/*
+        No fixed height: the card grows with its text, and the row stretches every card to the tallest one.
+        Every child keeps its own height (shrink-0), so the description can never slide under the tags.
+      */}
       <Panel
         // Solid card colour (white in the light theme) so the outlined "Projects" word behind never shows through.
         surface="solid"
         ticks={!soon}
-        className={cn("relative flex w-full flex-col overflow-hidden lg:grid lg:grid-cols-[1.08fr_1fr]", soon && "border-dashed! border-line-strong!")}
+        className={cn(
+          "relative flex w-[min(84vw,34rem)] shrink-0 flex-col gap-3.5 self-stretch overflow-hidden p-6 sm:gap-4 sm:p-8 *:shrink-0",
+          soon && "border-dashed! border-line-strong!",
+        )}
       >
-        <ProjectMedia project={project} />
-
-        <div className="relative flex flex-1 flex-col gap-3 p-5 sm:gap-3.5 sm:p-7 *:shrink-0">
-          <motion.span
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-2 -bottom-10 font-display text-[9rem] leading-none font-semibold tracking-tighter text-sky-bright/10 select-none sm:text-[12rem]"
-            style={still ? undefined : { x: numeralX }}
-          >
-            {pad(index + 1)}
-          </motion.span>
+        <motion.span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-2 -bottom-10 font-display text-[11rem] leading-none font-semibold tracking-tighter text-sky-bright/10 select-none sm:text-[15rem]"
+          style={still ? undefined : { x: numeralX }}
+        >
+          {pad(index + 1)}
+        </motion.span>
 
         <div className="flex items-center justify-between gap-3">
           <MonoLabel dot={!soon}>
@@ -64,20 +66,20 @@ function ProjectCard({ project, index, x, layout, still }: { project: Project; i
 
         <h3 className={cn("font-display text-[clamp(1.625rem,3vw,2.5rem)] leading-[1.05] font-medium tracking-[-0.03em] text-balance", soon && "text-muted-foreground")}>{project.title}</h3>
         <p className="type-label text-muted-foreground sm:hidden">{project.category}</p>
-        <p className={cn("text-sm leading-relaxed text-ink-soft sm:text-[0.9375rem]", soon && "text-muted-foreground")}>{project.description}</p>
+        <p className={cn("text-[0.9375rem] leading-relaxed text-ink-soft", soon && "text-muted-foreground")}>{project.description}</p>
 
         {project.tech.length > 0 && (
           // One line that fades out on phones, where height is tight. Wraps on larger screens.
           <ul className="flex gap-1.5 overflow-hidden mask-[linear-gradient(to_right,black_80%,transparent)] sm:flex-wrap sm:mask-none">
             {project.tech.map((tech) => (
               <li key={tech} className="shrink-0">
-                <Chip className="h-6 px-2.5 sm:h-7 sm:px-3">{tech}</Chip>
+                <Chip>{tech}</Chip>
               </li>
             ))}
           </ul>
         )}
 
-        <div className="relative mt-auto flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-line pt-4">
+        <div className="relative mt-auto flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-line pt-5">
           {project.links.map((link) => (
             <TextLink key={link.href} href={link.href} external>
               {link.label}
@@ -85,37 +87,18 @@ function ProjectCard({ project, index, x, layout, still }: { project: Project; i
           ))}
           {soon && <span className="type-label text-muted-foreground">Slot reserved</span>}
         </div>
-        </div>
       </Panel>
-    </motion.li>
-  );
-}
 
-/** The screenshot side of a card. On phones it sits on top in a short strip; on wide screens it fills the left column. */
-function ProjectMedia({ project }: { project: Project }) {
-  return (
-    <div className="relative aspect-2/1 shrink-0 overflow-hidden border-b border-line bg-sunk sm:aspect-video lg:aspect-auto lg:min-h-full lg:border-r lg:border-b-0">
-      {project.image ? (
-        <>
-          <Image
-            src={project.image}
-            alt={`Screenshot of ${project.title}`}
-            fill
-            sizes="(min-width: 1024px) 32rem, 86vw"
-            className="object-cover"
-            style={{ objectPosition: project.imagePosition ?? "left top" }}
-          />
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 shadow-[inset_0_0_0_1px_rgb(255_255_255/0.06)]" />
-        </>
-      ) : (
-        <div className="absolute inset-0 grid place-items-center">
-          <span className="type-label flex flex-col items-center gap-3 text-muted-foreground">
-            <Hammer aria-hidden="true" className="size-6" />
-            In progress
-          </span>
-        </div>
+      {/* The screenshot in a MacBook beside the card. Wide screens only: there is no room beside the card on phones and tablets. */}
+      {project.image && (
+        <MacbookFrame
+          src={project.image}
+          alt={`Screenshot of ${project.title}`}
+          position={project.imagePosition}
+          className="hidden [--mac-scale:0.6] lg:block xl:[--mac-scale:0.72]"
+        />
       )}
-    </div>
+    </motion.li>
   );
 }
 
@@ -126,6 +109,20 @@ export function ProjectsSection({ still }: { still: boolean }) {
   const layout = useRef<Layout>({ travel: 0, viewport: 0, centres: [] });
   const [current, setCurrent] = useState(0);
   const progress = useSectionProgress(section, scroll.projects);
+  const along = useTransform(progress, [0.06, 0.94], [0, 1], { clamp: true });
+
+  // Where the track sits. Set from both the scroll position and every new measurement, so the first
+  // card is centred even before the reader scrolls (along stays at 0 there and fires no change).
+  const x = useMotionValue(0);
+  const place = useCallback(
+    (value: number) => {
+      const { centres, viewport, travel } = layout.current;
+      const start = centres.length ? viewport / 2 - centres[0] : 0;
+      x.set(start - value * travel);
+    },
+    [x],
+  );
+  useMotionValueEvent(along, "change", place);
 
   useEffect(() => {
     const element = track.current;
@@ -136,6 +133,7 @@ export function ProjectsSection({ still }: { still: boolean }) {
       const centres = cards.map((card) => card.offsetLeft + card.offsetWidth / 2);
       // The first and last cards both come to rest in the middle of the screen.
       layout.current = { viewport, centres, travel: centres.length ? centres[centres.length - 1] - centres[0] : 0 };
+      place(along.get());
     };
     measure();
     const observer = new ResizeObserver(measure);
@@ -145,14 +143,8 @@ export function ProjectsSection({ still }: { still: boolean }) {
       observer.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, []);
+  }, [along, place]);
 
-  const along = useTransform(progress, [0.06, 0.94], [0, 1], { clamp: true });
-  const x = useTransform(along, (value) => {
-    const { centres, viewport, travel } = layout.current;
-    const start = centres.length ? viewport / 2 - centres[0] : 0;
-    return start - value * travel;
-  });
   const wordX = useTransform(progress, [0, 1], ["35%", "-75%"]);
   const rail = useTransform(along, [0, 1], [0, 1]);
   const headerY = useTransform(progress, [0, 0.06], ["8vh", "0vh"]);

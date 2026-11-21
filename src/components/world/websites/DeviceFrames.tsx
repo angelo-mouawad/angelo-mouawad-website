@@ -1,5 +1,45 @@
 import Image from "next/image";
+import { Keypad, SpeakerGrid, Trackpad } from "@/components/vendor/MacbookScroll";
 import { cn } from "@/lib/utils";
+
+/**
+ * An open MacBook around a desktop screenshot: the same black bezel, keyboard, speakers and trackpad
+ * as the scroll MacBook on /websites, standing still. It is drawn at its natural 32rem width and scaled
+ * to size with --mac-scale (set it in className, for example "[--mac-scale:0.6]").
+ */
+export function MacbookFrame({ src, alt, position = "left top", className }: { src: string; alt: string; position?: string; className?: string }) {
+  return (
+    <div className={cn("relative h-[calc(42rem*var(--mac-scale,1))] w-[calc(32rem*var(--mac-scale,1))] shrink-0", className)}>
+      <div className="absolute top-0 left-0 w-[32rem] origin-top-left" style={{ transform: "scale(var(--mac-scale, 1))" }}>
+        {/* Lid */}
+        <div className="relative h-[20rem] w-[32rem] rounded-2xl bg-[#010101] p-2 shadow-lift">
+          <div className="relative size-full overflow-hidden rounded-lg bg-[#272729]">
+            <Image src={src} alt={alt} fill sizes="(min-width: 1280px) 23rem, 19rem" className="object-cover" style={{ objectPosition: position }} />
+          </div>
+        </div>
+        {/* Base */}
+        <div className="relative h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
+          <div className="relative h-10 w-full">
+            <div className="absolute inset-x-0 mx-auto h-4 w-[80%] bg-[#050505]" />
+          </div>
+          <div className="relative flex">
+            <div className="mx-auto h-full w-[10%] overflow-hidden">
+              <SpeakerGrid />
+            </div>
+            <div className="mx-auto h-full w-[80%]">
+              <Keypad />
+            </div>
+            <div className="mx-auto h-full w-[10%] overflow-hidden">
+              <SpeakerGrid />
+            </div>
+          </div>
+          <Trackpad />
+          <div className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-[#050505]" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /** A browser window around a desktop screenshot. */
 export function BrowserFrame({ src, alt, url, className, priority = false }: { src: string; alt: string; url: string; className?: string; priority?: boolean }) {
