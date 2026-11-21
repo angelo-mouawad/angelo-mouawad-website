@@ -7,6 +7,9 @@ on:
   # Sent by the notes repo when notes change, so the site rebuilds with them
   repository_dispatch:
     types: [notes-updated]
+  # Daily rebuild so the commit skyline on the home page stays current
+  schedule:
+    - cron: "0 4 * * *" # 04:00 UTC
 
 permissions:
   contents: read
@@ -36,6 +39,10 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      # Fresh contribution data for the skyline. If the service is down, the committed JSON is used instead.
+      - run: npm run contributions
+        continue-on-error: true
 
       - run: npm run build
         env:
